@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.LoginPage"
+             BackgroundColor="White"
+             Title="LoginPage"
+             Shell.NavBarIsVisible="False">
+
+
+    <ContentPage.BindingContext>
+        <viewModels:LoginViewModel />
+    </ContentPage.BindingContext>
+
+
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0" Margin="0,20" Source="AppIcon.png" Aspect="AspectFit" HeightRequest="100" WidthRequest="150"></Image>
+            <Frame Grid.Row="1" Margin="0,0,0,0" BorderColor="White" HasShadow="True"  CornerRadius="50" HeightRequest="3500">
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" RowSpacing="20" Padding="20,00,20,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!--<Label Grid.Row="0" Margin="0,-25,0,0"  Text="Agenda Técnica" FontSize="24" FontAttributes="Bold" TextColor="#1C375C" HorizontalOptions="CenterAndExpand"></Label>-->
+                    <!--<Label Grid.Row="1" Margin="0,-25,0,0" Text="(aceder com email e password)" TextColor="#1C375C"  HorizontalOptions="CenterAndExpand"></Label>-->
+
+                    <StackLayout Grid.Row="2" Orientation="Horizontal" HorizontalOptions="StartAndExpand" Margin="5,-25,0,0">
+                        <Label Style="{StaticResource BootstrapIconsLogin}" Text="{Binding IconUser}" TextColor="DarkBlue"  FontSize="Large" HorizontalTextAlignment="Start"/>
+                        <Entry Text="{Binding UserName}" Placeholder="Introduza o utilizador" VerticalOptions="CenterAndExpand" MinimumWidthRequest="100" />
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="3" Orientation="Horizontal" HorizontalOptions="StartAndExpand" Margin="5,10,0,0">
+                        <Label Style="{StaticResource BootstrapIconsLogin}" Text="{Binding IconPassword}" TextColor="DarkBlue"  FontSize="Large" HorizontalTextAlignment="Start"/>
+                        <Entry Text="{Binding Password}" Placeholder="Introduza a password" IsPassword="True" VerticalOptions="CenterAndExpand" MinimumWidthRequest="100"/>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Vertical" Grid.Row="5">
+
+                        <Button  Text="Entrar na App" TextColor="White" 
+                              FontAttributes="Bold" 
+                              HorizontalOptions="FillAndExpand"
+                              BackgroundColor="CornflowerBlue" 
+                              CornerRadius="10"  Command="{Binding LoginCommand}" />
+
+                        <Label x:Name="lblStatus" Margin="0, 40" Text="{Binding Message}" TextColor="Red" FontAttributes="Bold" FontSize="Medium" />
+
+                        <!--<Button x:Name="btnSettings" 
+                         Text="Definições" 
+                         VerticalOptions="CenterAndExpand" 
+                         TextColor="White"
+                         CornerRadius="10"
+                         Margin="0, -50, 0, 10"
+                         BackgroundColor="{DynamicResource Primary}" 
+                         BorderColor="{DynamicResource Primary}" 
+                        Clicked="btnSettings_Clicked"/>-->
+
+                    </StackLayout>
+
+
+
+                    <!--<Button Grid.Row="7" Text="Registe-se aqui" Margin="0, -50" Clicked="Button_Clicked" VerticalOptions="CenterAndExpand" BackgroundColor="White" TextColor="DarkGray" CornerRadius="10" />-->
+
+
+                </Grid>
+            </Frame>
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
