@@ -13,8 +13,10 @@ namespace T2SLogistics
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Inter_Bold.ttf", "InterBold");
+                    fonts.AddFont("Inter_Medium.ttf", "InterMedium");
+                    fonts.AddFont("Inter_Regular.ttf", "InterRegular");
+                    fonts.AddFont("Inter_SemiBold.ttf", "InterSemiBold");
                 });
 
 #if DEBUG

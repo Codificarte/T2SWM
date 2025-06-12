@@ -40,4 +40,16 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}" />
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
+    
+    <!--App color-->
+    <Color x:Key="LightPink">#FA4B67</Color>
+    <Color x:Key="Brown">#523C40</Color>
+    <Color x:Key="Blue">#3F3AD1</Color>
+    <Color x:Key="DarkPink">#DD0326</Color>
+    <Color x:Key="Gray">#9E9A9A</Color>
+    <Color x:Key="SkyBlue">#85A8FB</Color>
+    <Color x:Key="Green">#11985B</Color>
+    <Color x:Key="DarkBlue">#1B15CC</Color>
+
+
 </ResourceDictionary>

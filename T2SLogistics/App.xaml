@@ -5,11 +5,120 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:T2SLogistics">
     <Application.Resources>
-        <ResourceDictionary>
+        <!--<ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>-->
+        <ResourceDictionary>
+            <!--ed1c24-->
+            <Color x:Key="Primary">#F44336</Color>
+            <Color x:Key="PrimaryDark">#D32F2F</Color>
+            <Color x:Key="LightPrimary">#FFCDD2</Color>
+            <Color x:Key="AccentColor">#607D8B</Color>
+            <Color x:Key="PrimaryText">#212121</Color>
+            <Color x:Key="SecundaryText">#757575</Color>
+            <Color x:Key="DividerColor">#BDBDBD</Color>
+            <Color x:Key="TextIcons">#FFFFFF</Color>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="#212121"></Setter>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#332196F3" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+
+        <ResourceDictionary>
+
+            <!--Added on 28-02-2023 DMD-->
+            <OnPlatform x:Key="Bootstrap" x:TypeArguments="x:String">
+                <On Platform="iOS" Value="Glyphicons" />
+                <On Platform="Android" Value="glyphicons-halflings-regular.ttf#Glyphicons" />
+            </OnPlatform>
+
+
+            <!--Added on 28-02-2023 Boostrap Icons DMD-->
+            <Style TargetType="{x:Type Label}" x:Key="BootstrapIconsLogin">
+                <Setter Property="FontFamily" Value="{StaticResource Bootstrap}"/>
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="#212121"/>
+            </Style>
+
+
+
+
+            <!--// text fonts-->
+
+            <Style TargetType="{x:Type Label}" x:Key="TitleH1">
+                <Setter Property="FontFamily" Value="Poppins-SemiBold"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+            </Style>
+            <Style TargetType="{x:Type Label}" x:Key="TextDataH1">
+                <Setter Property="FontFamily" Value="Poppins-SemiBold"/>
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="FontAttributes" Value="Bold"></Setter>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+            </Style>
+
+
+
+            <Style TargetType="{x:Type Label}" x:Key="TitleH2">
+                <Setter Property="FontFamily" Value="Poppins-Regular"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryText}"/>
+            </Style>
+
+
+            <Style TargetType="{x:Type Label}" x:Key="TitleH3">
+                <Setter Property="FontFamily" Value="Poppins-Light"/>
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryText}"/>
+            </Style>
+
+            <Style TargetType="{x:Type Label}" x:Key="TitleH4">
+                <Setter Property="FontFamily" Value="Poppins-Light"/>
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryText}"/>
+            </Style>
+
+
+            <Style TargetType="{x:Type Label}" x:Key="TextSimpleData">
+                <Setter Property="FontFamily" Value="Poppins-Regular"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryText}"/>
+            </Style>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
