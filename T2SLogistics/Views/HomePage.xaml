@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T2SLogistics.Views.HomePage"
+             BackgroundColor="White"
+             Title="HomePage">
+
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Padding="30">
+
+        <!-- Logo -->
+        <Image Source="t2s_logo.svg"
+               HeightRequest="90"
+               WidthRequest="150"
+               HorizontalOptions="Center" />
+
+        <!-- Swipe Icon with Background Circle -->
+        <Frame BackgroundColor="#fff"
+               HeightRequest="160"
+               WidthRequest="160"
+               CornerRadius="80"
+               HasShadow="False"
+               BorderColor="Transparent"
+               Padding="30"
+               Margin="40,60,40,20"
+               HorizontalOptions="Center">
+            <Image Source="swipe_icon.svg"
+                   Aspect="AspectFit"
+                   HeightRequest="180"
+                   WidthRequest="180"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </Frame>
+
+        <BoxView HeightRequest="30" Color="Transparent" />
+
+        <!-- Instructional Text -->
+        <Label Text="Deslize Para A Direita E"
+               FontSize="16"
+               FontAttributes="None" 
+               FontFamily="Inter"
+               HorizontalTextAlignment="Center"
+               CharacterSpacing="0"
+               TextColor="Black"/>
+
+        <Label Text="Selecione A Opção Desejada."
+               FontSize="16"
+               FontFamily="Inter"
+               FontAttributes="None" 
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"
+               CharacterSpacing="0"
+               TextColor="Black"/>
+
+    </StackLayout>
+
+</ContentPage>
