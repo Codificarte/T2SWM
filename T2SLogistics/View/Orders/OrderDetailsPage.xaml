@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T2SLogistics.View.Orders.OrderDetailsPage" xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                xmlns:local="clr-namespace:T2SLogistics" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             Title="OrderDetailsPage" NavigationPage.HasNavigationBar="False" x:Name="orderDetailsPage">
+    <Grid RowDefinitions="200,100,*" RowSpacing="10">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0"  IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Margin="20">
+            <Label Text="{Binding PhcOrder.familyProduct}" Style="{StaticResource BlackBoldTitleStyle}"/>
+            <Label >
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding OrdersCount}" Style="{StaticResource GrayRegularHeadingStyle}"/>
+                        <Span Text=" " />
+                        <Span Text="{local:Translate OrderDetailsPage_AvailableProducts}" Style="{StaticResource GrayRegularHeadingStyle}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+        <CollectionView Margin="20" Grid.Row="2" ItemsSource="{Binding OrdersList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 10" Margin="5" 
+                            Stroke="Transparent" BackgroundColor="{StaticResource LightBlue}">
+                        <!--<toolkit:Expander >
+                            <toolkit:Expander.Header>-->
+                        <StackLayout>
+
+                            <Grid ColumnDefinitions="50,*" ColumnSpacing="10"  Padding="20">
+                                <Image Source="box_outlined.png" HeightRequest="20" VerticalOptions="StartAndExpand">
+                                    <Image.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource White}" />
+                                    </Image.Behaviors>
+                                </Image>
+                                <StackLayout Grid.Column="1" Spacing="10">
+                                    <Label  Text="{Binding description}" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                                    <Grid ColumnDefinitions="*,*,*">
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="ID: " Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                                                    <Span Text="{Binding refProd}" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <StackLayout Grid.Column="1">
+                                            <StackLayout.Triggers>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding isStock}" Value="True">
+                                                    <Setter Property="IsVisible" Value="False"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding isStock}" Value="False">
+                                                    <Setter Property="IsVisible" Value="True"/>
+                                                </DataTrigger>
+                                            </StackLayout.Triggers>
+                                           
+
+                                        </StackLayout>
+                                        <Label Grid.Column="2">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Qtd: " Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                                                    <Span Text="{Binding qttRemain}" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                                                    <Span Text="/" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                                                    <Span Text="{Binding qttRequest}" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </StackLayout>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.ToggleExpandCommand, 
+                                                                  Source={x:Reference orderDetailsPage}}" CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
+                            </Grid>
+
+                            <!--</toolkit:Expander.Header>-->
+                            <!--<toolkit:Expander.Content>-->
+                            <Grid RowDefinitions="30,*" Padding="20" BackgroundColor="{StaticResource White}" IsVisible="{Binding IsExpanded}">
+                                <Label  Text="OPERACAÇÕES DISPONÍVES" FontSize="15" Style="{StaticResource BlackBoldTitleStyle}"/>
+                                <CollectionView Grid.Row="1" ItemsSource="{Binding operations}" >
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <Border Stroke="Transparent" BackgroundColor="{StaticResource BackgroundWhite}" 
+                                                        Padding="10" StrokeShape="RoundRectangle 15" HorizontalOptions="FillAndExpand">
+                                                <Grid ColumnDefinitions="50,*,50" ColumnSpacing="10">
+                                                    <Border Padding="10" Stroke="Transparent" HorizontalOptions="StartAndExpand"
+                                                                      StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource LightGreenBorderColor}">
+                                                        <Image Source="box.png" HeightRequest="40" Aspect="AspectFit"/>
+
+                                                    </Border>
+                                                    <Label Grid.Column="1"  VerticalOptions="CenterAndExpand" FontSize="15"
+                                                                     Text="{Binding operationName}" Style="{StaticResource BlackBoldTitleStyle}"/>
+                                                    <Image Grid.Column="2" HeightRequest="30" HorizontalOptions="EndAndExpand" Source="chevron.png" Aspect="AspectFit"/>
+                                                </Grid>
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.AddProductQtyModelCommand, 
+                                                                  Source={x:Reference orderDetailsPage}}" CommandParameter="{Binding .}"/>
+                                                </Border.GestureRecognizers>
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+
+                                </CollectionView>
+                            </Grid>
+                        </StackLayout>
+                        <!--</toolkit:Expander.Content>-->
+                        <!--</toolkit:Expander>-->
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

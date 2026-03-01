@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:T2SLogistics"      
+             xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"              
+             NavigationPage.HasNavigationBar="False" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="T2SLogistics.View.InsertProduction.IdentifyUsercodePage"
+             Title="IdentifyUsercodePage"  >
+    <Grid>
+        <Grid BackgroundColor="{StaticResource Gray500}" Opacity="0.7" VerticalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnClose"/>
+            </Grid.GestureRecognizers>
+        </Grid>
+        <Border HeightRequest="370" Stroke="Transparent" Padding="20" Margin="20,0"
+                BackgroundColor="{StaticResource White}" StrokeShape="RoundRectangle 10,10,10,10">
+            <Border.Margin>
+                <OnIdiom x:TypeArguments="Thickness">
+                    <OnIdiom.Phone>40, 10, 40, 0</OnIdiom.Phone>
+                    <OnIdiom.Tablet>70, 10, 70, 0</OnIdiom.Tablet>
+                </OnIdiom>
+            </Border.Margin>
+            <StackLayout Spacing="30">
+                <StackLayout HorizontalOptions="CenterAndExpand" Spacing="10">
+
+                    <Label Style="{StaticResource BlackBoldTitleStyle}" Text="{local:Translate InsertProductionPage_IdentifyEmployee}"/>
+                </StackLayout>
+                <StackLayout Spacing="10">
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Image Source="operator.png" HeightRequest="17" >
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray550}" />
+
+                            </Image.Behaviors>
+                        </Image>
+                        <Label Text="{local:Translate InsertProductionPage_EmployeeID}" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                    </StackLayout>
+                    <Border Padding="10,7" StrokeShape="RoundRectangle 10" Stroke="#EAEAEA" 
+                             BackgroundColor="{StaticResource BackgroundWhite}">
+                        <Entry x:Name="UserIdEntry" Text="{Binding UserCode}" Placeholder="{local:Translate InsertProductionPage_EnterUourID}" 
+                               HorizontalOptions="CenterAndExpand" Keyboard="Numeric" FontSize="18"  />
+                    </Border>
+                </StackLayout>
+                <Grid ColumnDefinitions="100,100" ColumnSpacing="10" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Cancel" Clicked="OnClose" Style="{StaticResource BlueThemeBorderStyle}"
+                            TextColor="{StaticResource LightBlue}"/>
+
+                    <Button Text="Save" Grid.Column="1" Command="{Binding SaveCommand}"
+        Style="{StaticResource LightBlackThemeButtonStyle}"
+        TextColor="White"/>
+                </Grid>
+            </StackLayout>
+
+        </Border>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+    </Grid>
+
+</pages:PopupPage>

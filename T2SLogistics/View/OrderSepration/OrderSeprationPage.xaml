@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T2SLogistics.View.OrderSepration.OrderSeprationPage"
+             Title="OrderSeprationPage"  xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:T2SLogistics" NavigationPage.HasNavigationBar="False"
+             xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates" x:Name="orderSepration">
+    <Grid RowDefinitions="auto,50,*,auto" RowSpacing="10">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" HeightRequest="{x:OnIdiom Tablet=200,Phone=80}"
+                                          VerticalOptions="StartAndExpand" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout Grid.Row="1"  Spacing="10" >
+
+            <Border  BackgroundColor="White" Stroke="{StaticResource LightBlue}" StrokeThickness="2" 
+                   StrokeShape="RoundRectangle 50" Padding="10,0,3,0" VerticalOptions="CenterAndExpand">
+                <Border.Margin>
+                    <OnIdiom x:TypeArguments="Thickness">
+                        <OnIdiom.Phone>20, 0, 20, 0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>130, 10, 130, 0</OnIdiom.Tablet>
+                    </OnIdiom>
+                </Border.Margin>
+                <Grid ColumnDefinitions="*,40" ColumnSpacing="10" >
+                    <Entry Placeholder="{local:Translate ViewOrdersPage_SearchProductPlaceholder}" 
+                PlaceholderColor="{StaticResource Gray500}" Text="{Binding SearchOrderSeprationName}"/>
+                    <Border StrokeShape="RoundRectangle 70" HeightRequest="30" WidthRequest="30" Stroke="Transparent"
+                          BackgroundColor="{StaticResource LightBlue}" Grid.Column="1">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SearchOrderSeprationListCommand}"/>
+                        </Border.GestureRecognizers>
+                        <Image Source="search.png" HeightRequest="13" Aspect="AspectFit">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="White" />
+                            </Image.Behaviors>
+                        </Image>
+
+                    </Border>
+
+                </Grid>
+            </Border>
+        </StackLayout>
+
+        <Grid Grid.Row="2" BackgroundColor="{StaticResource Secondary}" >
+            <CollectionView  ItemsSource="{Binding CustomersOrders}" Margin="20,0" VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 20"  Stroke="Transparent" 
+                              BackgroundColor="White" Margin="10" Padding="20">
+                            <Grid >
+                                <StackLayout Spacing="10" >
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackLayout Spacing="10">
+                                            <Label Text="{Binding customerName}"  VerticalOptions="CenterAndExpand" 
+                                                    FontAttributes="Bold" Style="{StaticResource BlackBoldTitleStyle}" FontSize="13"/>
+                                            <Label Text="{Binding dateCustomer,StringFormat='{0:dd MMMM yyyy}'}" FontAttributes="None"
+                                                    FontSize="13" Style="{StaticResource BlackBoldSubtitleStyle}" TextColor="{StaticResource Gray500}"/>
+                                        </StackLayout>
+                                        <Label  HorizontalOptions="EndAndExpand" Grid.Column="1"
+                                               Text="{Binding status}" Style="{StaticResource BlackBoldSubtitleStyle}">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding status}" Value="Pendente">
+                                                    <Setter Property="TextColor" Value="{StaticResource DarkRedBorderColor}"/>
+                                                </DataTrigger>
+                                              
+                                                <DataTrigger TargetType="Label" Binding="{Binding status}" Value="Em Curso">
+                                                    <Setter Property="TextColor" Value="{StaticResource DarkGreenBorderColor}"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                    </Grid>
+
+
+                                    <Button Text="{local:Translate OrderSeprationPage_StartSeparation}" 
+                                            BackgroundColor="{StaticResource DarkGreenBorderColor}"
+                                            Command="{Binding BindingContext.OrderSeprationDetailCommand, 
+                                        Source={x:Reference orderSepration}}" CommandParameter="{Binding .}" >
+                                        <!--<Button.Triggers>
+                                            <DataTrigger TargetType="Button" Binding="{Binding status}" Value="Pendente">
+                                                <Setter Property="IsVisible" Value="True"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Button" Binding="{Binding status}" Value="Em Curso">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                            
+                                        </Button.Triggers>-->
+                                    </Button>
+
+                                </StackLayout>
+                               
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </Grid>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="2" 
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+
+    </Grid>
+</ContentPage>

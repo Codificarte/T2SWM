@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:T2SLogistics" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             x:Class="T2SLogistics.View.CustomerOrders.CustomerOrdersPage" x:Name="customerOrders"
+             Title="ExpeditionPage" NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="auto,50,*,auto" RowSpacing="10">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" HeightRequest="{x:OnIdiom Tablet=200,Phone=80}"
+                                            VerticalOptions="StartAndExpand" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout Grid.Row="1"  Spacing="10" >
+
+            <Border  BackgroundColor="White" Stroke="{StaticResource LightBlue}" StrokeThickness="2" 
+                     StrokeShape="RoundRectangle 50" Padding="10,0,3,0" VerticalOptions="CenterAndExpand">
+                <Border.Margin>
+                    <OnIdiom x:TypeArguments="Thickness">
+                        <OnIdiom.Phone>20, 0, 20, 0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>130, 10, 130, 0</OnIdiom.Tablet>
+                    </OnIdiom>
+                </Border.Margin>
+                <Grid ColumnDefinitions="*,40" ColumnSpacing="10" >
+                    <Entry x:Name="searchEntry" Placeholder="{local:Translate ViewOrdersPage_SearchProductPlaceholder}" 
+                  PlaceholderColor="{StaticResource Gray500}" Text="{Binding SearchOrderName}" />
+                    <Border StrokeShape="RoundRectangle 70" HeightRequest="30" WidthRequest="30" Stroke="Transparent"
+                            BackgroundColor="{StaticResource LightBlue}" Grid.Column="1">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SearchCustomerOrderListCommand}"/>
+                        </Border.GestureRecognizers>
+                        <Image Source="search.png" HeightRequest="13" Aspect="AspectFit">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="White" />
+                            </Image.Behaviors>
+                        </Image>
+
+                    </Border>
+
+                </Grid>
+            </Border>
+        </StackLayout>
+          
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" BackgroundColor="{StaticResource Secondary}" >
+            <Border BackgroundColor="White" Stroke="{StaticResource Gray100}" StrokeThickness="2" 
+ StrokeShape="RoundRectangle 10" Padding="10,0" >
+                <Grid ColumnDefinitions="40,*" ColumnSpacing="10">
+                    <Image Source="barcode.png" Aspect="AspectFit"/>
+                    <Entry x:Name="BarcodeEntry" Grid.Column="1" Placeholder="{local:Translate OrderReadingPage_ScanOrEnterTheCode}" Completed="OnInputBarcode_Completed"
+       Text="{Binding RefEanCode}" PlaceholderColor="{StaticResource Gray500}" Keyboard="Numeric"/>
+
+                </Grid>
+            </Border>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding CustomersOrders}" Margin="10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 20"  Stroke="Transparent" 
+                                BackgroundColor="White" Margin="10" Padding="20">
+                            <Grid RowDefinitions="Auto,*">
+                                <Grid ColumnDefinitions="*,auto">
+                                    <StackLayout Spacing="10" >
+
+                                        <Label Text="{Binding customerName}"  VerticalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold" Style="{StaticResource BlackBoldTitleStyle}" FontSize="13"/>
+                                        <Label Text="{Binding dateCustomer,StringFormat='{0:dd MMMM yyyy}'}" FontAttributes="None"
+                                                       FontSize="13" Style="{StaticResource BlackBoldSubtitleStyle}" TextColor="{StaticResource Gray500}"/>
+                                        <StackLayout Orientation="Horizontal" Spacing="10">
+
+
+                                            <Border StrokeShape="RoundRectangle 10" Padding="10,5" Stroke="Transparent"
+                                                            BackgroundColor="{StaticResource LightRedBorderColor}">
+
+                                                <StackLayout Orientation="Horizontal" Spacing="5">
+                                                    <Image Source="pending.png" Aspect="AspectFit" HeightRequest="20"/>
+                                                    <Label Style="{StaticResource BlackBoldSubtitleStyle}" 
+                                                                   TextColor="{StaticResource DarkRedBorderColor}" FontSize="13" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Pending: " FontSize="13" Style="{StaticResource BlackBoldSubtitleStyle}"  TextColor="{StaticResource DarkRedBorderColor}"/>
+
+                                                                <Span Text="{Binding pendingQuanty}" FontSize="13" Style="{StaticResource BlackBoldSubtitleStyle}"  TextColor="{StaticResource DarkRedBorderColor}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.ExpandOrderItemCommand, 
+                                                        Source={x:Reference customerOrders}}" CommandParameter="{Binding .}"/>
+                                                </Border.GestureRecognizers>
+                                            </Border>
+                                        </StackLayout>
+
+                                    </StackLayout>
+                                    <Border Grid.Column="1" StrokeShape="RoundRectangle 70" VerticalOptions="StartAndExpand"
+                                                    Stroke="Transparent" BackgroundColor="{StaticResource Gray100}" Padding="10">
+                                        <Image  Aspect="AspectFit" 
+                                                      VerticalOptions="CenterAndExpand"  HorizontalOptions="CenterAndExpand" HeightRequest="10">
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding IsExpanded}" 
+                                                                     Value="False">
+                                                    <Setter Property="Source" Value="right_arrow_filled.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Image" Binding="{Binding IsExpanded}"
+                                                                     Value="True">
+                                                    <Setter Property="Source" Value="down_arrow_filled.png"/>
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                            <Image.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray550}" />
+
+                                            </Image.Behaviors>
+                                        </Image>
+                                       
+                                    </Border>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.CustomerOrderDetailCommand, 
+                                            Source={x:Reference customerOrders}}" CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+
+                                <CollectionView IsVisible="{Binding IsExpanded}" Grid.Row="1" ItemsSource="{Binding orderItems}" >
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                            <StackLayout>
+                                                <Grid ColumnDefinitions="*,auto" Padding="0,5">
+                                                    <StackLayout Spacing="10">
+                                                        <Label Text="{Binding productDescription}" FontSize="13" 
+                                                               Style="{StaticResource BlackBoldTitleStyle}" VerticalOptions="CenterAndExpand"/>
+                                                       <StackLayout Orientation="Horizontal" Spacing="10" >
+
+                                                           <Label Text="{Binding productRef}" FontAttributes="None" FontSize="13" 
+                                                                  Style="{StaticResource BlackBoldSubtitleStyle}" TextColor="{StaticResource Gray500}"/>
+                                                                   <Label>
+                                                                      <Label.FormattedText>
+                                                                         <FormattedString>
+                                                                            <Span Text="Prev : " FontSize="13"  Style="{StaticResource BlackBoldTitleStyle}"/>
+                                                                            <Span Text="{Binding pendingReadQuanty}" FontSize="13"  Style="{StaticResource BlackBoldTitleStyle}"/>
+                                                                            </FormattedString>
+                                                                      </Label.FormattedText>
+                                                                   </Label>
+                                                                     <Label>
+                                                                      <Label.FormattedText>
+                                                                         <FormattedString>
+                                                                            <Span Text="Lido : " FontSize="13"  Style="{StaticResource BlackBoldTitleStyle}"/>
+                                                                            <Span Text="{Binding quantity}" FontSize="13"  Style="{StaticResource BlackBoldTitleStyle}"/>
+                                                                            </FormattedString>
+                                                                      </Label.FormattedText>
+                                                                   </Label>
+                                                                   <Image IsVisible="{Binding IsFullyRead}" Source="fully_read.png" HorizontalOptions="EndAndExpand" HeightRequest="20" Aspect="AspectFit"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                    <!---<Label Text="{Binding quantitySep}" FontSize="13" Style="{StaticResource BlackBoldSubtitleStyle}" 
+                                                           VerticalOptions="CenterAndExpand" Grid.Column="1"/>-->
+                                                </Grid>
+                                                <BoxView Color="{StaticResource Gray100}" HeightRequest="2"/>
+                                            </StackLayout>
+                                              
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                 </CollectionView>
+
+
+                            </Grid>
+
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </Grid>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="2" 
+                                                 HorizontalOptions="Center" VerticalOptions="Center"/>
+
+    </Grid>
+</ContentPage>

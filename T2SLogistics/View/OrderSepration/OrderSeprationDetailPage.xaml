@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T2SLogistics.View.OrderSepration.OrderSeprationDetailPage"
+             Title="OrderSeprationDetailPage" xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:T2SLogistics" NavigationPage.HasNavigationBar="False"
+             xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates" x:Name="orderSeprationDetail">
+    <Grid RowDefinitions="auto,auto,*,auto" RowSpacing="5">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" HeightRequest="{x:OnIdiom Tablet=200,Phone=80}" VerticalOptions="StartAndExpand" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Margin="10" Spacing="10" >
+            <StackLayout Orientation="Horizontal" Spacing="10" Margin="20,0">
+                <Image Source="order_details.png" Aspect="AspectFit" HeightRequest="15"/>
+                <Label Style="{StaticResource GrayBoldHeadingStyle}"  VerticalOptions="CenterAndExpand" TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_OrderDetails}"/>
+            </StackLayout>
+            <Grid  ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" Margin="20,0" RowSpacing="10">
+              
+
+                <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                    <!-- Grid interno para permitir sobreposição -->
+                    <Grid>
+                        <!-- Fundo / decoração (opcional) -->
+                        <Border Stroke="Transparent" BackgroundColor="{StaticResource DarkBlue}" StrokeShape="RoundRectangle 10"/>
+
+                        <!-- Cartão do cliente (ocupa toda a largura). Padding right reserva espaço para a badge -->
+                        <Border Margin="4,0,0,0" Stroke="Transparent" BackgroundColor="{StaticResource BackgroundWhite}" StrokeShape="RoundRectangle 10" Padding="15,12,100,12">
+                            <StackLayout Spacing="4" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                <Label Style="{StaticResource GrayRegularHeadingStyle}" FontSize="13" TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_Customer}"/>
+                                <Label Style="{StaticResource BlackBoldTitleStyle}" FontSize="15" Text="{Binding CustomersOrder.customerName}" LineBreakMode="TailTruncation" HorizontalOptions="FillAndExpand"/>
+                            </StackLayout>
+                        </Border>
+
+                        <!-- Badge de status sobreposta, canto superior direito -->
+                        <StackLayout HorizontalOptions="End" VerticalOptions="Start" Margin="0,8,12,0">
+
+                            <Border StrokeShape="RoundRectangle 20" Padding="8,4" BackgroundColor="{StaticResource LightGreenBorderColor}" HorizontalOptions="Center">
+                                <Label Text="{Binding CustomersOrder.status}" Style="{StaticResource BlackBoldSubtitleStyle}" TextColor="{StaticResource DarkGreenBorderColor}" FontSize="12" HorizontalOptions="Center"/>
+                            </Border>
+                        
+                        </StackLayout>
+                    </Grid>
+                </Grid>
+                
+          
+            </Grid>
+          
+          
+        </StackLayout>
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="10" >
+            <StackLayout Grid.Row="0"  VerticalOptions="Start" Spacing="10">
+                <BoxView  Color="{StaticResource Gray100}"  HeightRequest="2"/>
+                <StackLayout Orientation="Horizontal" Spacing="10" Margin="20,0">
+                    <Image Source="box.png" Aspect="AspectFit" HeightRequest="15"/>
+                    <Label Style="{StaticResource GrayBoldHeadingStyle}"  VerticalOptions="CenterAndExpand"
+                            TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_OrderProducts}"/>
+                </StackLayout>
+            </StackLayout>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding OrderItem}" Margin="20,0" VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 10" Padding="15" Margin="5" StrokeThickness="2"> 
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="1">
+                                    <Setter Property="Stroke" Value="{StaticResource DarkGreenBorderColor}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource LightGreenBorderColor}"/>
+
+                                </DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="2">
+                                    <Setter Property="Stroke" Value="{StaticResource DarkRedBorderColor}"/>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <StackLayout Spacing="10">
+                                <Grid ColumnDefinitions="*,70">
+                                    <Label Text="{Binding productDescription}" LineBreakMode="WordWrap" FontSize="15"  
+                                           Style="{StaticResource BlackBoldTitleStyle}"/>
+                                    <Border Grid.Column="1" HorizontalOptions="EndAndExpand" HeightRequest="20" 
+                                            WidthRequest="20" StrokeShape="RoundRectangle 90">
+                                        <Image Aspect="AspectFill">
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding Status}" Value="1">
+                                                    <Setter Property="Source" Value="ok_checked.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Image" Binding="{Binding Status}" Value="2">
+                                                    <Setter Property="Source" Value="warning.png"/>
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                    </Border>
+                                </Grid>
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="REF: " FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                <Span Text="{Binding productRef}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <!--<Border  Padding="10,5" Stroke="Transparent" BackgroundColor="#FEF3C7" StrokeShape="RoundRectangle 10">-->
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Qtd. Prevista: " FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                    <Span Text="{Binding quantity}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    <!--</Border>-->
+                                    
+                             
+                                    
+                                </StackLayout>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Dec Forma: " FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                <Span Text="{Binding decForma}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{local:Translate OrderSeprationDetailPage_SeparateQuantity}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                <Span Text="{Binding quantitySep}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Column="2" >
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{local:Translate OrderSeprationDetailPage_Missing}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                <Span Text="{Binding RemainingQuantity}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                </Grid>
+                            
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="10">
+                                    <Border BackgroundColor="#10B981" Stroke="Transparent" StrokeShape="RoundRectangle 5" Padding="10">
+                                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand"  Spacing="10" HorizontalOptions="CenterAndExpand">
+                                            <Image Source="check.png" HeightRequest="15" Aspect="AspectFit">
+                                                <Image.Behaviors>
+                                                    <toolkit:IconTintColorBehavior TintColor="{StaticResource White}" />
+
+                                                </Image.Behaviors>
+                                            </Image>
+                                            <Label  Text="{local:Translate OrderSeprationDetailPage_Complete}" FontSize="13" Style="{StaticResource WhiteBoldTitleStyle}"/>
+
+                                        </StackLayout>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.CompleteCommand, 
+                                                    Source={x:Reference orderSeprationDetail}}" CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Border Grid.Column="1" BackgroundColor="{StaticResource DarkRedBorderColor}" Stroke="Transparent" StrokeShape="RoundRectangle 5" >
+                                        <StackLayout Orientation="Horizontal" Spacing="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                            <Image Source="edit.png" HeightRequest="15" Aspect="AspectFit">
+                                                <Image.Behaviors>
+                                                    <toolkit:IconTintColorBehavior TintColor="{StaticResource White}" />
+
+                                                </Image.Behaviors>
+                                            </Image>
+                                            <Label >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        
+                                                        <Span Text="{local:Translate CustomerOrderDetailPage_Incomplete}"  FontSize="13" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                                                        <Span Text=" " />
+                                                        <Span Text="{Binding ConfirmedQuantity}" FontSize="13" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.IncompleteCommand, 
+                                                  Source={x:Reference orderSeprationDetail}}" CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Border IsEnabled="False" IsVisible="False" Grid.Column="1"  BackgroundColor="{StaticResource LightGreenBorderColor}"
+                                            StrokeThickness="2" Stroke="{StaticResource DarkGreenBorderColor}" StrokeShape="RoundRectangle 5">
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="1">
+                                                <Setter Property="IsVisible" Value="True"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="2">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                        <Label Text="Verified" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="{StaticResource DarkGreenBorderColor}" Style="{StaticResource GrayRegularHeadingStyle}"/>
+                                    </Border>
+                                </Grid>
+                            </StackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+        </Grid>
+        <Grid Grid.Row="3" Margin="20,10" ColumnDefinitions="*,*" ColumnSpacing="10" >
+            <Border BackgroundColor="{StaticResource DarkBlue}" Stroke="Transparent" StrokeShape="RoundRectangle 5" Padding="10">
+                <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand"  Spacing="10" HorizontalOptions="CenterAndExpand">
+                    <Image Source="back.png"  HeightRequest="15" Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{StaticResource White}" />
+
+                        </Image.Behaviors>
+                    </Image>
+                    <Label  Text="{local:Translate OrderSeprationDetailPage_Back}" TextTransform="Uppercase" FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>
+
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                </Border.GestureRecognizers>
+            </Border>
+            <Border Grid.Column="1" BackgroundColor="#6366F1" Stroke="Transparent" StrokeShape="RoundRectangle 5" >
+                <StackLayout Orientation="Horizontal" Spacing="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                    <Image Source="check.png" HeightRequest="15" Aspect="AspectFit"/>
+
+
+                    <Label Text="{local:Translate OrderSeprationDetailPage_Confirm}" TextTransform="Uppercase" 
+                           FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddReadOrderSeprationCommand}"/>
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

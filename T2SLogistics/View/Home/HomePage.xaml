@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" NavigationPage.HasNavigationBar="False"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:T2SLogistics"
+             x:Class="T2SLogistics.View.Home.HomePage" xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             Title="HomePage" >
+    <Grid RowDefinitions="Auto,*">
+
+        <CustomTemplates:HeaderTemplateView VerticalOptions="StartAndExpand" HeightRequest="{x:OnIdiom Tablet=200,Phone=130}" 
+                                            Grid.Row="0" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <Button ImageSource="logout.png" HeightRequest="30" Margin="0,10" Command="{Binding LogoutCommand}" BackgroundColor="Transparent"
+                HorizontalOptions="EndAndExpand" VerticalOptions="StartAndExpand"/>
+        <ScrollView Grid.Row="1" >
+            <StackLayout  Margin="0,20" Spacing="10">
+                <!--<Border Grid.ColumnSpan="2" BackgroundColor="#7DCBEE" Padding="20" Stroke="Transparent" Margin="20,0">
+                    <StackLayout HorizontalOptions="CenterAndExpand">
+                        <Label >
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Day}" FontSize="15" Style="{StaticResource WhiteBoldSubtitleStyle}" FontAttributes="None" />
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding Date}" FontSize="15"  Style="{StaticResource WhiteBoldSubtitleStyle}" FontAttributes="None" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label x:Name="clockTimerLabel" HorizontalOptions="CenterAndExpand" FontSize="40" Style="{StaticResource WhiteBoldTitleStyle}"/>
+
+                    </StackLayout>
+                </Border>-->
+                <StackLayout Spacing="10" IsVisible="{x:OnIdiom Phone=True, Tablet=False}"  Margin="20,0">
+
+                    <Border Padding="20" Stroke="Transparent" BackgroundColor="#27A9E3">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="clock.png" HeightRequest="30"/>
+                            <Label HorizontalOptions="EndAndExpand" Text="{local:Translate HomePage_Point}" FontAttributes="None"
+                   FontSize="28" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                            <!--<Label Text="{local:Translate HomePage_RegisterEntryAndExit}" FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>-->
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RegisterEntryExitPointCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                 
+                    
+                    
+                    <Border Padding="20" IsEnabled="{x:OnIdiom Phone=True, Tablet=False}"
+                        Stroke="Transparent" BackgroundColor="#28B779">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="expidition.png"  HeightRequest="30"/>
+
+                            <Label Text="{local:Translate HomePage_Expedition}" FontAttributes="None" FontSize="28"
+                                   HorizontalOptions="EndAndExpand" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ViewExpeditionCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Padding="20" Stroke="Transparent" BackgroundColor="#27A9E3">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="inventory.png" HeightRequest="30"/>
+                            <Label HorizontalOptions="EndAndExpand" Text="{local:Translate HomePage_Inventory}" FontAttributes="None"
+                            FontSize="28" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                            <!--<Label Text="{local:Translate HomePage_RegisterEntryAndExit}" FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>-->
+
+                        </StackLayout>
+                      
+                    </Border>
+
+
+
+                    <Border Padding="20" IsEnabled="{x:OnIdiom Phone=True, Tablet=False}"
+                             Stroke="Transparent" BackgroundColor="#28B779">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+
+                            <Image HorizontalOptions="Start"  Source="barcode.png"  HeightRequest="40">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                                </Image.Behaviors>
+                            </Image>
+
+                            <Label Text="{local:Translate HomePage_Breaks}" FontAttributes="None" FontSize="28"
+                            HorizontalOptions="EndAndExpand" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BreaksCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Padding="20" Stroke="Transparent" BackgroundColor="#27A9E3">
+
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start"  Source="orders.png"  HeightRequest="30"/>
+
+                            <Label  Grid.Column="1" Text="{local:Translate HomePage_OrderSeparation}" FontAttributes="None" 
+                                   FontSize="28" HorizontalOptions="EndAndExpand" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OrderSeprationCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </StackLayout>
+                
+                <Grid RowDefinitions="auto,100,100" HorizontalOptions="CenterAndExpand" 
+                  RowSpacing="10" ColumnSpacing="10" IsVisible="{x:OnIdiom Phone=False, Tablet=True}">
+                    <Grid.ColumnDefinitions>
+                        <OnIdiom x:TypeArguments="ColumnDefinitionCollection">
+
+                            <!-- Phone -->
+                            <OnIdiom.Phone>
+                                <ColumnDefinitionCollection>
+                                    <ColumnDefinition Width="170" />
+                                    <ColumnDefinition Width="170" />
+                                </ColumnDefinitionCollection>
+                            </OnIdiom.Phone>
+                            <OnIdiom.Tablet>
+                                <ColumnDefinitionCollection>
+                                    <ColumnDefinition Width="300" />
+                                    <ColumnDefinition Width="300" />
+                                </ColumnDefinitionCollection>
+                            </OnIdiom.Tablet>
+                        </OnIdiom>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Row="1"   Padding="10" Stroke="Transparent" BackgroundColor="#27A9E3">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="clock.png" HeightRequest="30"/>
+                            <Label HorizontalOptions="EndAndExpand" Text="{local:Translate HomePage_Point}" FontAttributes="None"
+                               FontSize="28" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                            <!--<Label Text="{local:Translate HomePage_RegisterEntryAndExit}" FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>-->
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RegisterEntryExitPointCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1" Padding="10" IsEnabled="{x:OnIdiom Phone=False, Tablet=True}"
+                        Stroke="Transparent" BackgroundColor="#28B779">
+                        <!--<Border.Padding>
+                        <OnIdiom x:TypeArguments="Thickness">
+                            <OnIdiom.Phone>7, 20</OnIdiom.Phone>
+                            <OnIdiom.Tablet>30, 20</OnIdiom.Tablet>
+
+                        </OnIdiom>
+                    </Border.Padding>-->
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="insert_production.png"  HeightRequest="30"/>
+
+                            <Label Text="{local:Translate HomePage_InsertProduction}" FontAttributes="None" 
+                               FontSize="28" HorizontalOptions="EndAndExpand" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+                            <!--<Label Text="{local:Translate HomePage_ViewProductionOrders}" Style="{StaticResource BlackBoldSubtitleStyle}"/>-->
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ViewOrdersCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <!--<Border Grid.Row="2" Padding="10" Stroke="Transparent" BackgroundColor="#28B779">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <Image HorizontalOptions="Start" Source="inventory.png" HeightRequest="30"/>
+                            <Label HorizontalOptions="EndAndExpand" Text="{local:Translate HomePage_Inventory}" FontAttributes="None"
+                  FontSize="28" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                        </StackLayout>
+                        --><!--<Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding RegisterEntryExitPointCommand}"/>
+                    </Border.GestureRecognizers>--><!--
+                    </Border>-->
+                    
+                    <Border Grid.Row="2" Grid.ColumnSpan="2" Padding="10" Stroke="Transparent" BackgroundColor="#27A9E3">
+
+                        <StackLayout Spacing="10" Orientation="Horizontal" VerticalOptions="Start">
+                            <!--<Image HorizontalOptions="Start" Source="expidition.png"  HeightRequest="30"/>-->
+
+                            <Label Text="{local:Translate HomePage_OrderSeparation}" FontAttributes="None" FontSize="28"
+                               HorizontalOptions="EndAndExpand" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OrderSeprationCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
+            </StackLayout>
+
+        </ScrollView>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="1" 
+                                                 HorizontalOptions="Center" VerticalOptions="Center"/>
+
+    </Grid>
+</ContentPage>

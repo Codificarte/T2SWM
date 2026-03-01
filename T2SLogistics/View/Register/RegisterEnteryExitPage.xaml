@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:local="clr-namespace:T2SLogistics"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             NavigationPage.HasNavigationBar="False" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             x:Class="T2SLogistics.View.Register.RegisterEnteryExitPage" xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="RegisterEnteryExitPage" BackgroundColor="{StaticResource BackgroundWhite}">
+    <Grid RowDefinitions="200,*" RowSpacing="20">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" HeightRequest="{x:OnIdiom Tablet=200,Phone=130}" VerticalOptions="StartAndExpand" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <Border Grid.Row="1" VerticalOptions="StartAndExpand" StrokeShape="RoundRectangle 10" Stroke="Transparent"
+                     BackgroundColor="{StaticResource White}" Padding="20" Margin="0,20">
+            <Border.Margin>
+                <OnIdiom x:TypeArguments="Thickness">
+                    <OnIdiom.Phone>40, 10, 40, 0</OnIdiom.Phone>
+                    <OnIdiom.Tablet>70, 10, 70, 0</OnIdiom.Tablet>
+                </OnIdiom>
+            </Border.Margin>
+            <StackLayout Spacing="30">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="10">
+                    <Image Source="clock.png" HeightRequest="20">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Black}" />
+
+                        </Image.Behaviors>
+                    </Image>
+                    <Label Style="{StaticResource BlackBoldTitleStyle}" FontSize="13" Text="{local:Translate InsertProductionPage_AttendanceControl}"/>
+                </StackLayout>
+                <StackLayout Spacing="10">
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Image Source="operator.png" HeightRequest="17" >
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Gray550}" />
+
+                            </Image.Behaviors>
+                        </Image>
+                        <Label Text="{local:Translate InsertProductionPage_EmployeeID}" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                    </StackLayout>
+                    <Border Padding="10,7" StrokeShape="RoundRectangle 10" Stroke="#EAEAEA" 
+                             BackgroundColor="{StaticResource BackgroundWhite}">
+                        <Entry x:Name="UserIdEntry" Text="{Binding UserCode}" Placeholder="{local:Translate InsertProductionPage_EnterUourID}" 
+                               HorizontalOptions="CenterAndExpand" Completed="UserIdEntry_Completed" Keyboard="Numeric" FontSize="18"  />
+                    </Border>
+                </StackLayout>
+                <Grid ColumnDefinitions="100,100" ColumnSpacing="10" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Cancel" Command="{Binding GoBackCommand}"
+        Style="{StaticResource BlueThemeBorderStyle}"
+        TextColor="{StaticResource LightBlue}"/>
+
+                    <Button Text="Save" Grid.Column="1" Command="{Binding SaveCommand}"
+        Style="{StaticResource LightBlackThemeButtonStyle}"
+        TextColor="White"/>
+                </Grid>
+            </StackLayout>
+          
+        </Border>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+    </Grid>
+   
+    
+</ContentPage>

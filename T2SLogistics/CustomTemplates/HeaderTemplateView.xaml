@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:T2SLogistics" 
+             x:Class="T2SLogistics.CustomTemplates.HeaderTemplateView" x:Name="headerTemplateView">
+    <Grid  >
+        <Grid.Padding>
+            <OnIdiom x:TypeArguments="Thickness">
+                <OnIdiom.Phone>20, 0</OnIdiom.Phone>
+                <OnIdiom.Tablet>50, 0</OnIdiom.Tablet>
+            </OnIdiom>
+        </Grid.Padding>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <!-- Vertical Gradient -->
+                <GradientStop Color="#936E52" Offset="0.0" />
+                <!-- Light Green at Top -->
+                <GradientStop Color="#35312F" Offset="0.5" />
+                <!-- Medium Green -->
+                <GradientStop Color="#242728" Offset="1.0" />
+                <!-- Dark Green at Bottom -->
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Image Source="background_login.png" HeightRequest="{x:OnIdiom Tablet=130 ,Phone=70}" VerticalOptions="StartAndExpand"  Aspect="AspectFill" />
+        <StackLayout  Orientation="Horizontal" VerticalOptions="EndAndExpand"   Spacing="10" Padding="10">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 70"  HeightRequest="{x:OnIdiom Tablet=90 ,Phone=50}">
+                <Image Source="t2s_logo.svg" Aspect="AspectFit"  />
+
+            </Border>
+            <Label  Text="Duro Ceramics" VerticalOptions="CenterAndExpand" Margin="0,0,0,0" FontSize="10" Style="{StaticResource WhiteBoldSubtitleStyle}"/>
+            <StackLayout HorizontalOptions="EndAndExpand" IsVisible="{Binding IsTimerViewViewVisible,Source={x:Reference headerTemplateView}}"
+                         VerticalOptions="EndAndExpand" Padding="10,0">
+                <StackLayout.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2A2A2A" Offset="0.0" />
+                        <GradientStop Color="#2F2F2F" Offset="0.5" />
+                        <GradientStop Color="#313131" Offset="1.0" />
+                    </LinearGradientBrush>
+                </StackLayout.Background>
+                <Label x:Name="clockTimerLabel" HorizontalOptions="EndAndExpand" FontSize="13"  Style="{StaticResource WhiteBoldTitleStyle}"/>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span x:Name="day" FontSize="10"  Style="{StaticResource WhiteBoldSubtitleStyle}" FontAttributes="None" />
+                            <Span Text=" "/>
+                            <Span x:Name="date" FontSize="10"  Style="{StaticResource WhiteBoldSubtitleStyle}" FontAttributes="None" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <StackLayout Orientation="Horizontal" Spacing="10" IsVisible="{Binding IsOperatorViewVisible,Source={x:Reference headerTemplateView}}">
+                    <Image Source="operator" HeightRequest="13"/>
+                    <Label Text="{local:Translate HomePage_Operator}" VerticalOptions="Center" FontSize="10"  Style="{StaticResource WhiteBoldSubtitleStyle}" />
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+
+</ContentView>

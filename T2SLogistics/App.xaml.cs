@@ -1,159 +1,57 @@
 ﻿using T2SLogistics.Helpers;
-using T2SLogistics.Models;
-using T2SLogistics.Services;
-using T2SLogistics.ViewModels.Expedicao;
-using T2SLogistics.ViewModels.Recepcao;
-using T2SLogistics.Views;
+using T2SLogistics.Services.Interface;
+using T2SLogistics.View.Auth;
+using T2SLogistics.View.Home;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Globalization;
 
 namespace T2SLogistics
 {
     public partial class App : Application
     {
+        public static IServiceProvider serviceProvider;
+        public static ISettingsService settingsService;
+
         public App()
         {
             InitializeComponent();
-        }
+            UserAppTheme = AppTheme.Light;
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-
-            DependencyService.Register<MockDataStore>();
-
-            Settings.TipoDocEncomendaFornec = "1";
-            Settings.TipoDocEncomendaCliente = "2";
-            Settings.TipoDocEncomendaEntidades = "3";
-
-
-            Settings.UserName = "t2s";
-            Settings.Password = "t2s";
-
-            if (string.IsNullOrEmpty(Settings.UrlApiBase))
+            serviceProvider =
+#if ANDROID
+  MauiApplication.Current.Services;
+#elif IOS || MACCATALYST
+    MauiUIApplicationDelegate.Current.Services;
+#else
+    null;
+#endif
+            Application.Current.Resources["DefaultStringResources"] = new Resx.AppResources();
+            settingsService = serviceProvider.GetService<ISettingsService>();
+            if (!string.IsNullOrEmpty(settingsService.Applanguage))
             {
-                return new Window(new SettingsPage());
+                LocalizationResourceManager.Instance.SetCulture(new CultureInfo(settingsService.Applanguage));
+
+            }
+            if (string.IsNullOrEmpty(settingsService.BaseUrl))
+            {
+                settingsService.BaseUrl = AppConstants.ApiBaseUrl;
+            }
+            SetMainPage();
+        }
+        private void SetMainPage()
+        {
+            if (string.IsNullOrEmpty(settingsService.AuthToken))
+            {
+                MainPage = new NavigationPage(serviceProvider.GetService<LoginPage>());
 
             }
             else
             {
-                //TODO: remove this
-                if (Settings.NifEmpresa == "500074496")
-                {
-
-                    try
-                    {
-                        LoadLotesCaiaca();
-                        //LoadFornecedoresCaiaca();
-                        CleanLocalFornecsArtigos();
-
-                        var recVM = new RecepcaoCaiacaHomeViewModel();
-
-                        var _fornecsInDb = Task.Run(async () => await recVM.GetFornecedoresFromApi()).Result;
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Settings.UserName = "";
-                        Settings.Password = "";
-                    }
-
-                }
-
-                if (!string.IsNullOrEmpty(Settings.UserName) && !string.IsNullOrEmpty(Settings.Password) && !Settings.UserMustResetPassword)
-                    return new Window(new AppShell());
-                else
-
-                    return new Window(new LoginPage());
+                MainPage = new NavigationPage(serviceProvider.GetService<HomePage>());
 
             }
-        }
 
-        //public App()
-        //{
-        //    InitializeComponent();
-
-        //    DependencyService.Register<MockDataStore>();
-
-        //    Settings.TipoDocEncomendaFornec = "1";
-        //    Settings.TipoDocEncomendaCliente = "2";
-        //    Settings.TipoDocEncomendaEntidades = "3";
-
-
-        //    Settings.UserName = "t2s";
-        //    Settings.Password = "t2s";
-
-        //    if (string.IsNullOrEmpty(Settings.UrlApiBase))
-        //    {
-
-        //        MainPage = new SettingsPage();
-
-        //    }
-        //    else
-        //    {
-        //        //TODO: remove this
-        //        if (Settings.NifEmpresa == "500074496")
-        //        {
-
-        //            try
-        //            {
-        //                LoadLotesCaiaca();
-        //                //LoadFornecedoresCaiaca();
-        //                CleanLocalFornecsArtigos();
-
-        //                var recVM = new RecepcaoCaiacaHomeViewModel();
-
-        //                var _fornecsInDb = Task.Run(async () => await recVM.GetFornecedoresFromApi()).Result;
-        //            }
-        //            catch (System.Exception ex)
-        //            {
-        //                Settings.UserName = "";
-        //                Settings.Password = "";
-        //            }
-
-        //        }
-
-        //        if (!string.IsNullOrEmpty(Settings.UserName) && !string.IsNullOrEmpty(Settings.Password) && !Settings.UserMustResetPassword)
-        //            MainPage = new AppShell();
-        //        else
-        //            MainPage = new LoginPage();
-
-        //    }
-
-
-
-        //}
-
-        private async void LoadLotesCaiaca()
-        {
-            var _expedicaoVM = new ExpedicaoCaiacaViewModel();
-            await _expedicaoVM.GetLotesFromApi();
-        }
-
-
-        private async void LoadFornecedoresCaiaca()
-        {
-            var _recVM = new RecepcaoCaiacaHomeViewModel();
-            await _recVM.GetFornecedoresFromApi();
-        }
-
-        private void CleanLocalFornecsArtigos()
-        {
-            var _fornecs = new FornecedoresCaiaca();
-            _fornecs.UpdateLocalDb();
-
-            var _artigos = new ArtigosCaiaca();
-            _artigos.UpdateLocalArtigosRecepcao();
-
-        }
-
-
-        protected override void OnStart()
-        {
-        }
-
-        protected override void OnSleep()
-        {
-        }
-
-        protected override void OnResume()
-        {
         }
     }
 }

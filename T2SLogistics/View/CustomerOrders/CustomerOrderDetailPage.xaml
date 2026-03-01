@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             x:Class="T2SLogistics.View.CustomerOrders.CustomerOrderDetailPage" 
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:T2SLogistics"
+             Title="CustomerOrderDetailPage" NavigationPage.HasNavigationBar="False" x:Name="customerOrderDetailPage">
+    <Grid RowDefinitions="auto,100,*,auto" RowSpacing="5">
+
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" HeightRequest="{x:OnIdiom Tablet=200,Phone=80}" VerticalOptions="StartAndExpand" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        
+        <StackLayout Grid.Row="1" Margin="10,0" Spacing="5">
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Image Source="order_details.png" Aspect="AspectFit" HeightRequest="25"/>
+                <Label Style="{StaticResource GrayBoldHeadingStyle}" VerticalOptions="CenterAndExpand" TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_OrderDetails}"/>
+            </StackLayout>
+            <!-- Only Customer Name and Date below -->
+            <Grid Margin="10,0">
+                <Border StrokeShape="RoundRectangle 15" Stroke="Transparent" Background="{StaticResource LightBlue}"/>
+                <Border Margin="5,0,0,0" Stroke="Transparent" BackgroundColor="{StaticResource BackgroundWhite}" StrokeShape="RoundRectangle 10">
+                    <StackLayout Padding="10" Spacing="5">
+                        <!--<Label Style="{StaticResource GrayRegularHeadingStyle}" TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_Customer}"/>-->
+                        <Label Style="{StaticResource BlackBoldTitleStyle}" FontSize="13" Text="{Binding CustomersOrder.customerName}" HorizontalOptions="FillAndExpand"/>
+                        <Label FontSize="13" Style="{StaticResource BlackBoldTitleStyle}" Text="{Binding CustomersOrder.orderDate, StringFormat='{0:dd/MM/yyyy}'}" HorizontalOptions="FillAndExpand"/>
+                    </StackLayout>
+                </Border>
+            </Grid>
+            
+        </StackLayout>
+        
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" >
+            <StackLayout Grid.Row="0"  VerticalOptions="Start" >
+                <BoxView WidthRequest="500" Color="{StaticResource Gray100}" HeightRequest="2"/>
+                <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,0">
+                    <Image Source="box.png" Aspect="AspectFit" HeightRequest="25"/>
+                    <Label Style="{StaticResource GrayBoldHeadingStyle}"  VerticalOptions="CenterAndExpand"
+                TextTransform="Uppercase" Text="{local:Translate CustomerOrderDetailPage_ProcessedBoxes}"/>
+                </StackLayout>
+            </StackLayout>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding OrderBoxes}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10" Margin="10" BackgroundColor="#F0F9FF" Stroke="{StaticResource LightBlue}"  StrokeShape="RoundRectangle 10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectOrderBoxCommand, 
+                                    Source={x:Reference customerOrderDetailPage}}" CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+                            <Grid RowDefinitions="Auto,*">
+                                <StackLayout Orientation="Horizontal">
+                                    <Border Stroke="{StaticResource LightBlue}" StrokeThickness="2" Padding="5" StrokeShape="RoundRectangle 5">
+                                        <Label Text="{Binding BoxNumber,StringFormat='Box {0}'}" Style="{StaticResource BlueLabelStyle}"/>
+                                    </Border>
+                                </StackLayout>
+                                <CollectionView Grid.Row="1" ItemsSource="{Binding ReadItems}" BackgroundColor="{StaticResource BackgroundWhite}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Margin="10,5" Spacing="10">
+                                                <Label FontSize="13" Text="{Binding productDescription}" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label>
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Code : " FontSize="13" Style="{StaticResource GrayRegularHeadingStyle}"/>
+                                                                <Span Text="{Binding eanCode}" FontSize="13" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label>
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text=" Qty: " FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                                                                <Span Text="{Binding quantity}" FontSize="13" Style="{StaticResource GrayBoldHeadingStyle}"/>
+
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                                <BoxView Color="{StaticResource Gray100}" HeightRequest="2"/>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Grid>
+                           
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+        <StackLayout Grid.Row="3" Margin="10,0"  Spacing="10">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Border BackgroundColor="#10B981" Stroke="Transparent" StrokeShape="RoundRectangle 10" Padding="10">
+                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand"  Spacing="10" HorizontalOptions="CenterAndExpand">
+                        <Image Source="add.png"  HeightRequest="20" Aspect="AspectFit">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryPurple}" />
+
+                            </Image.Behaviors>
+                        </Image>
+                        <Label  Text="{local:Translate CustomerOrderDetailPage_NewBox}" TextTransform="Uppercase" FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>
+
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AddingNewBoxCommand}"/>
+                    </Border.GestureRecognizers>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="#6366F1" Stroke="Transparent" StrokeShape="RoundRectangle 10" >
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FinishReadingCommand}"/>
+                    </Border.GestureRecognizers>
+                    <StackLayout Orientation="Horizontal" Spacing="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                        <Image Source="check.png" HeightRequest="20" Aspect="AspectFit">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource White}" />
+
+                            </Image.Behaviors>
+                        </Image>
+                        <Label Text="{local:Translate CustomerOrderDetailPage_FinishReading}" TextTransform="Uppercase" 
+                               FontSize="15" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                    </StackLayout>
+                </Border>
+            </Grid>
+            <Button ImageSource="check.png" Margin="0,0,0,5" HeightRequest="10" FontAttributes="Bold" 
+                    Command="{Binding CloseExpeditionCommand}" Text="{local:Translate CustomerOrderDetailPage_CloseOrder}" TextTransform="Uppercase"/>
+        </StackLayout>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+	
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="LoginPage_Username" xml:space="preserve">
+    <value>Utilizador</value>
+  </data>
+	<data name="ResetNewPasswordPage_NewPasswordTitle" xml:space="preserve">
+    <value>Nova Senha</value>
+  </data>
+	<data name="ResetNewPasswordPage_ConfirmPasswordTitle" xml:space="preserve">
+    <value>Confirme senha</value>
+  </data>
+	<data name="LoginPage_EnterYourEmail" xml:space="preserve">
+    <value>Digite seu Utilizador</value>
+  </data>
+  <data name="InsertProductQuantityPopup_InsertQuantity" xml:space="preserve">
+    <value>Inserir Quantidade</value>
+  </data>
+	<data name="InsertProductQuantityPopup_QtyBreaks" xml:space="preserve">
+    <value>Qtd Quebras</value>
+  </data>
+  	<data name="InsertProductQuantityPopup_SaveProductionEntry" xml:space="preserve">
+    <value>Salvar entrada de produção</value>
+  </data>
+	<data name="InsertProductQuantityPopup_QtyProduced" xml:space="preserve">
+    <value>Qtd Produzito</value>
+  </data>
+  <data name="LoginPage_Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+	<data name="LoginPage_EnterYourPassword" xml:space="preserve">
+    <value>Digite sua senha</value>
+  </data>
+	<data name="StringLogin" xml:space="preserve">
+    <value>Conecte-se</value>
+  </data>
+	<data name="ButtonSave" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+	<data name="LoginPage_ForgotPassword" xml:space="preserve">
+    <value>Esqueceu a senha</value>
+  </data>
+   <data name="LoginPage_RememberMe" xml:space="preserve">
+    <value>Lembrar-me</value>
+  </data>
+   <data name="String_OR" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="LoginPage_CreateNewAccount" xml:space="preserve">
+    <value>Criar nova conta </value>
+  </data>
+  <data name="LoginPage_Welcome" xml:space="preserve">
+    <value>Bem-vindo</value>
+  </data>
+  <data name="LoginPage_LoginToContinue" xml:space="preserve">
+    <value>Faça login para continuar</value>
+  </data>
+	<data name="ResetNewPasswordPage_NewPassword" xml:space="preserve">
+    <value>Nova senha</value>
+  </data>
+	<data name="ResetNewPasswordPage_Title" xml:space="preserve">
+    <value>Redefinir senha</value>
+  </data>
+	<data name="ResetNewPasswordPage_ConfirmNewPassword" xml:space="preserve">
+    <value>Confirme sua nova senha</value>
+  </data>
+	<data name="StringContinue" xml:space="preserve">
+    <value>Continuar</value>
+  </data>
+	<data name="HomePage_ProductionSystem" xml:space="preserve">
+    <value>Sistema de Produção</value>
+  </data>
+	<data name="HomePage_Ceramicsmanagement" xml:space="preserve">
+    <value>Gestão de cerâmica</value>
+  </data>
+	<data name="HomePage_Point" xml:space="preserve">
+    <value>Ponto</value>
+  </data>
+	<data name="HomePage_Inventory" xml:space="preserve">
+    <value>Inventário</value>
+  </data>
+	<data name="HomePage_Expedition" xml:space="preserve">
+    <value>Expedição</value>
+  </data>
+	<data name="HomePage_OrderSeparation" xml:space="preserve">
+    <value>Separação</value>
+  </data>
+	<data name="HomePage_RegisterEntryAndExit" xml:space="preserve">
+    <value>Registrar entrada e saída</value>
+  </data>
+	<data name="HomePage_Orders" xml:space="preserve">
+    <value>Encomendas</value>
+  </data>
+	<data name="HomePage_ViewProductionOrders" xml:space="preserve">
+    <value>Ver ordens de produção</value>
+  </data>
+	<data name="HomePage_InsertProduction" xml:space="preserve">
+    <value>Inserir Produção</value>
+  </data>
+	<data name="HomePage_ProductionOrders" xml:space="preserve">
+    <value>Ordens de produção</value>
+  </data>
+	<data name="HomePage_PointRecord" xml:space="preserve">
+    <value>Registo de Ponto</value>
+  </data>
+	<data name="String_Orders" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
+	<data name="String_Read" xml:space="preserve">
+    <value>Ler</value>
+  </data>
+	<data name="String_Lack" xml:space="preserve">
+    <value>Falta</value>
+  </data>
+	<data name="OrderReadingPage_Cancel" xml:space="preserve">
+      <value>Cancelar</value>
+  </data>
+	<data name="OrderReadingPage_UnExpectedArticle" xml:space="preserve">
+      <value>Artigo não previsto!</value>
+  </data>
+	<data name="CustomerOrderDetailPage_OrderDetails" xml:space="preserve">
+    <value>Detalhes encomenda</value>
+  </data>
+	<data name="CustomerOrderDetailPage_ProcessedBoxes" xml:space="preserve">
+    <value>Caixas Processadas</value>
+  </data>
+  <data name="CustomerOrderDetailPage_OrderProducts" xml:space="preserve">
+    <value>Encomendar produtos</value>
+  </data>
+	<data name="CustomerOrderDetailPage_NewBox" xml:space="preserve">
+    <value>Nova caixa</value>
+  </data>
+	<data name="CustomerOrderDetailPage_CloseOrder" xml:space="preserve">
+    <value>Fechar pedido</value>
+  </data>
+	<data name="CustomerOrderDetailPage_FinishReading" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+	<data name="CustomerOrderDetailPage_OrderNumber" xml:space="preserve">
+    <value>Pedido nº.</value>
+  </data>
+	<data name="CustomerOrderDetailPage_Customer" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+	<data name="CustomerOrderDetailPage_Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+	<data name="CustomerOrderDetailPage_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+	<data name="HomePage_Point" xml:space="preserve">
+    <value>Ponto</value>
+  </data>
+	<data name="HomePage_LaunchFinishedProducts" xml:space="preserve">
+    <value>Lançar produtos terminados</value>
+  </data>
+	<data name="HomePage_Operator" xml:space="preserve">
+    <value>Operador</value>
+  </data>
+	<data name="ViewOrdersPage_OpenOrders" xml:space="preserve">
+    <value>Encomendas em Aberto</value>
+  </data>
+	<data name="ViewOrdersPage_SearchProductPlaceholder" xml:space="preserve">
+    <value>Procurar produtos por código ou nome...</value>
+  </data>
+	<data name="ViewProductOperationPage_Operation" xml:space="preserve">
+    <value> OPERAÇÃO</value>
+  </data>
+	<data name="OrderSeprationPage_StartSeparation" xml:space="preserve">
+    <value>Iniciar separação</value>
+  </data>
+	<data name="ViewProductOperationPage_SearchForOperation" xml:space="preserve">
+    <value>Procurar operações...</value>
+  </data>
+	<data name="ViewProductOperationPage_Available" xml:space="preserve">
+    <value>Disponível</value>
+  </data>
+	<data name="ViewProductOperationPage_Inprocess" xml:space="preserve">
+    <value>Em processo</value>
+  </data>
+	<data name="ViewProductOperationPage_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+	<data name="ViewProductOperationPage_ToPerform" xml:space="preserve">
+    <value> a ser executada:</value>
+  </data>
+	<data name="ViewOrdersPage_ChooseThe" xml:space="preserve">
+    <value>Escolha o </value>
+  </data>
+	<data name="ViewOrdersPage_Product" xml:space="preserve">
+    <value> PRODUTO</value>
+  </data>
+	<data name="ViewOrdersPage_Order" xml:space="preserve">
+    <value> Ordem</value>
+  </data>
+	<data name="ViewOrdersPage_ChooseTheProductOrder" xml:space="preserve">
+    <value>Escolha o PRODUTO Ordem</value>
+  </data>
+	<data name="ViewOrdersPage_Workon" xml:space="preserve">
+    <value> em que vai trabalhar:</value>
+  </data>
+	<data name="ViewOrdersPage_StartProduction" xml:space="preserve">
+    <value>Iniciar produção</value>
+  </data>
+	<data name="InsertProductionPage_RegisterProduction" xml:space="preserve">
+    <value>Registar Produção</value>
+  </data>
+	<data name="InsertProductionPage_PointRecord" xml:space="preserve">
+    <value>Registro de Ponto</value>
+  </data>
+	<data name="InsertProductionPage_AttendanceControl" xml:space="preserve">
+    <value>Controlo de Presença</value>
+  </data>
+	<data name="InsertProductionPage_EnterUourID" xml:space="preserve">
+    <value>Digite o seu ID</value>
+  </data>
+	<data name="InsertProductionPage_EmployeeID" xml:space="preserve">
+    <value>ID do Funcionário</value>
+  </data>
+	<data name="InsertProductionPage_Enter" xml:space="preserve">
+    <value>Entrada</value>
+  </data>
+	<data name="InsertProductionPage_Exit" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+	<data name="InsertProductionPage_SelectedOrder" xml:space="preserve">
+    <value>Encomenda Selecionado</value>
+  </data>
+	<data name="InsertProductionPage_Production" xml:space="preserve">
+    <value>Produção</value>
+  </data>
+	<data name="InsertProductionPage_Operation" xml:space="preserve">
+    <value>Operação *</value>
+  </data>
+	<data name="InsertProductionPage_QuantityProduced" xml:space="preserve">
+    <value>Quantidade Produzida</value>
+  </data>
+	<data name="ViewProductOperationPage_SelectedProduct" xml:space="preserve">
+    <value>Produto Selecionado: </value>
+  </data>
+	<data name="InsertProductionPage_IdentifyEmployee" xml:space="preserve">
+      <value>Identificar funcionário</value>
+  </data>
+	<data name="OrderReadingPage_BarcodeReading" xml:space="preserve">
+      <value>Leitura de código de barras</value>
+  </data>
+	<data name="OrderReadingPage_ScanOrEnterTheCode" xml:space="preserve">
+      <value>Leia ou insira o código...</value>
+  </data>
+	<data name="OrderReadingPage_Clear" xml:space="preserve">
+      <value>Clear</value>
+  </data>
+	<data name="OrderReadingPage_Manual" xml:space="preserve">
+      <value>Manual</value>
+  </data>
+	<data name="OrderReadingPage_ReadingProgress" xml:space="preserve">
+      <value>Progresso da leitura</value>
+  </data>
+	<data name="OrderReadingPage_Articles" xml:space="preserve">
+      <value>Artigos</value>
+  </data>
+	<data name="OrderSeprationDetailPage_SeparateQuantity" xml:space="preserve">
+      <value>Qtt Separado: </value>
+  </data>
+	<data name="OrderSeprationDetailPage_Missing" xml:space="preserve">
+      <value>Em Falta: </value>
+  </data>
+	<data name="OrderReadingPage_SaveReading" xml:space="preserve">
+      <value>Gravar</value>
+  </data>
+	<data name="OrderSeprationDetailPage_Complete" xml:space="preserve">
+      <value>Completa</value>
+  </data>
+	<data name="OrderSeprationDetailPage_Back" xml:space="preserve">
+      <value>Voltar</value>
+  </data>
+	<data name="OrderSeprationDetailPage_Confirm" xml:space="preserve">
+      <value>Confirmar</value>
+  </data>
+	<data name="OrderDetailsPage_AvailableProducts" xml:space="preserve">
+      <value>produtos disponíveis</value>
+  </data>
+	<data name="HomePage_Breaks" xml:space="preserve">
+      <value>Quebras</value>
+  </data>
+	<data name="HomePage_Inventory" xml:space="preserve">
+      <value>Inventário</value>
+  </data>
+	<data name="CustomerOrderDetail_ConfirmationClosingTheOrder" xml:space="preserve">
+      <value>Confirma fechar a encomenda?</value>
+  </data>
+	<data name="CustomerOrderDetail_ProcessCompleted" xml:space="preserve">
+      <value>Processo concluído</value>
+  </data>
+	<data name="CustomerOrderDetail_SavedData" xml:space="preserve">
+      <value>Dados guardados</value>
+  </data>
+</root>

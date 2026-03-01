@@ -1,10 +1,9 @@
 ﻿using Foundation;
 
-namespace T2SLogistics
+namespace T2SLogistics;
+
+[Register("AppDelegate")]
+public class AppDelegate : MauiUIApplicationDelegate
 {
-    [Register("AppDelegate")]
-    public class AppDelegate : MauiUIApplicationDelegate
-    {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }

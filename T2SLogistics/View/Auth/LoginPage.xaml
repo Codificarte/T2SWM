@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" NavigationPage.HasNavigationBar="False"
+             xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             x:Class="T2SLogistics.View.Auth.LoginPage" xmlns:local="clr-namespace:T2SLogistics" 
+             Title="LoginPage">
+    <Grid RowDefinitions="auto,*">
+       
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" IsOperatorViewVisible="False" IsTimerViewViewVisible="True"
+        HeightRequest="200" 
+        IsVisible="{x:OnIdiom Phone=false, Tablet=true}"/>
+        <StackLayout Grid.Row="1"  >
+            <StackLayout.Margin>
+                <OnIdiom x:TypeArguments="Thickness">
+                    <OnIdiom.Phone>40, 10, 40, 10</OnIdiom.Phone>
+                    <OnIdiom.Tablet>70, 10, 70, 10</OnIdiom.Tablet>
+                </OnIdiom>
+            </StackLayout.Margin>
+            <StackLayout Spacing="5"  IsVisible="{x:OnIdiom Phone=true, Tablet=false}"  >
+
+                    <Image Source="t2s_logo.svg" HeightRequest="80"  Margin="0,20,0,0" />
+
+                    <Label Text="{local:Translate LoginPage_Welcome}" HorizontalOptions="CenterAndExpand" 
+                 Style="{StaticResource BlackBoldTitleStyle}" FontSize="20"/>
+                    <Label Text="{local:Translate LoginPage_LoginToContinue}" HorizontalOptions="CenterAndExpand" FontSize="13" Style="{StaticResource SubHeadline}"/>
+
+            </StackLayout>
+            <StackLayout Spacing="{x:OnIdiom Phone=10,Tablet=20}" VerticalOptions="CenterAndExpand">
+                <StackLayout Spacing="10">
+                    <Label Text="{local:Translate LoginPage_Username}" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                    <Border Padding="10,0" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource White}">
+                        <Entry Placeholder="{local:Translate LoginPage_EnterYourEmail}" Text="{Binding Email}" 
+                 PlaceholderColor="{StaticResource Gray500}"/>
+                    </Border>
+                </StackLayout>
+
+                <StackLayout Spacing="10">
+                    <Label Text="{local:Translate LoginPage_Password}" Style="{StaticResource GrayBoldHeadingStyle}"/>
+                    <Border Padding="10,0" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource White}">
+                        <Grid ColumnDefinitions="*,55">
+                            <Entry x:Name="passwordEntry" IsPassword="True" Placeholder="{local:Translate LoginPage_EnterYourPassword}" Text="{Binding Password}"
+                   PlaceholderColor="{StaticResource Gray500}"/>
+                            <Button Grid.Column="1" Clicked="OnTogglePasswordVisibility" ImageSource="hide_password.png" 
+                     HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" />
+                        </Grid>
+
+                    </Border>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <StackLayout Orientation="Horizontal" >
+                        <CheckBox IsChecked="{Binding RememberMe}" 
+                    Color="{StaticResource Black}" VerticalOptions="Center"/>
+                        <Label VerticalOptions="Center" FontSize="10"  Text="{local:Translate LoginPage_RememberMe}"/>
+                    </StackLayout>
+                    <Label Text="{local:Translate LoginPage_ForgotPassword}" Style="{StaticResource BlueLinkStyle}"
+            FontSize="10" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+                </StackLayout>
+
+                <Button Command="{Binding LoginCommand}"  TextTransform="Uppercase" Padding="0"
+         Style="{StaticResource LightBlackThemeButtonStyle}" Text="{local:Translate StringLogin}"/>
+
+
+                <!--<Grid ColumnDefinitions="*,30,*" IsVisible="{x:OnIdiom Phone=true, Tablet=false}">
+                    <BoxView Color="{StaticResource Gray200}" HeightRequest="1"  />
+                    <Label Grid.Column="1" Text="{local:Translate String_OR}"  HorizontalOptions="CenterAndExpand" FontSize="13"/>
+                    <BoxView Grid.Column="2" Color="{StaticResource Gray200}" HeightRequest="1" />
+
+                </Grid>-->
+                
+                <!--<Button IsVisible="{x:OnIdiom Phone=true, Tablet=false}" Text="{local:Translate LoginPage_CreateNewAccount}" Padding="0"
+                    Style="{StaticResource BlueThemeBorderStyle}"/>-->
+                
+                <StackLayout Orientation="Horizontal" >
+
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="StartAndExpand">
+                        <Image Source="{Binding SelectedLanguageFlag}" HeightRequest="25" />
+                        <Label Text="{Binding SelectedLanguage}" FontSize="15" VerticalOptions="CenterAndExpand" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectLanguageCommand}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+
+                    <StackLayout HorizontalOptions="EndAndExpand" Spacing="5" >
+                        <Image Source="configurations.png" HeightRequest="25"/>
+                        <Label Text="Config" TextColor="{StaticResource LightBlue}" FontSize="15"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ConfigPopupCommand}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                    
+                </StackLayout>
+                
+            </StackLayout>
+            <Label Text="{Binding AppVersion}" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="End" 
+                   Margin="0,0,0,20"
+                   FontSize="12"
+                   TextColor="{StaticResource Gray500}"/>
+        </StackLayout>
+        <CustomTemplates:CustomActivityIndicator x:Name="activityIndicator" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

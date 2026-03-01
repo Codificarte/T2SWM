@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:T2SLogistics" 
+             NavigationPage.HasNavigationBar="False"  xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="T2SLogistics.View.InsertProduction.InsertProductionPage"
+             Title="InsertProductionPage">
+    <Grid RowDefinitions="70,*" RowSpacing="20">
+        <Grid ColumnDefinitions="50,*" ColumnSpacing="10">
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Image Source="back.png" HeightRequest="20" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <Label Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="25"
+               Style="{StaticResource BlackBoldTitleStyle}"  Text="{local:Translate InsertProductionPage_RegisterProduction}"/>
+        </Grid>
+        <Border Grid.Row="1" Margin="0,0" Stroke="Transparent">
+            <StackLayout Spacing="20">
+                <StackLayout Orientation="Horizontal" BackgroundColor="{StaticResource PrimaryPurple}" Spacing="20" Padding="20">
+                    <Image Source="box_outlined.png" HeightRequest="20" HorizontalOptions="Start">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="White" />
+
+                        </Image.Behaviors>
+                    </Image>
+                    <Label Text="{local:Translate InsertProductionPage_Production}" Style="{StaticResource WhiteBoldTitleStyle}"/>
+                </StackLayout>
+                
+                <StackLayout Padding="20,0" Spacing="5">
+                    <Border BackgroundColor="{StaticResource BackgroundWhite}" StrokeShape="RoundRectangle 15" 
+                            Padding="20" Stroke="Transparent">
+                        <StackLayout>
+                            <Label Text="{local:Translate InsertProductionPage_SelectedOrder}" Style="{StaticResource BlackBoldSubtitleStyle}"
+          TextColor="{StaticResource Gray500}" FontSize="15"/>
+                            <Label Text="{Binding SelectedOrder.refProd}" Style="{StaticResource BlackBoldTitleStyle}"
+                                   FontSize="17"/>
+                        </StackLayout>
+                    </Border>
+                    <Label Text="{local:Translate InsertProductionPage_Operation}" Style="{StaticResource BlackBoldSubtitleStyle}"
+                            TextColor="{StaticResource Gray500}" FontSize="17"/>
+                    <Border BackgroundColor="{StaticResource BackgroundWhite}" StrokeThickness="{Binding SelectedThickness}" 
+                            StrokeShape="RoundRectangle 15" Padding="20" Stroke="Black">
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding SelectedOperation}" Style="{StaticResource BlackBoldSubtitleStyle}"/>
+                            <Image Source="down_arrow.png" HorizontalOptions="EndAndExpand" HeightRequest="20"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenOperationDropdown}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </Border>
+                </StackLayout>
+                <StackLayout Padding="20,0" Spacing="5">
+                    <Label Text="{local:Translate InsertProductionPage_QuantityProduced}" Style="{StaticResource BlackBoldSubtitleStyle}"
+                           TextColor="{StaticResource Gray500}" FontSize="17"/>
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Border StrokeShape="RoundRectangle 100" Padding="20" Stroke="{StaticResource BackgroundWhite}"
+                                BackgroundColor="{StaticResource BackgroundWhite}">
+                            <Image Source="minus.png" HeightRequest="20"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DecreaseProducedQuantityCommand}"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Border Padding="50,0" StrokeShape="RoundRectangle 10" Stroke="{StaticResource BackgroundWhite}"
+                                BackgroundColor="{StaticResource BackgroundWhite}" >
+                                <Label Text="{Binding QuantityProduced}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource BlackBoldTitleStyle}"/>
+                        </Border>
+                        <Border StrokeShape="RoundRectangle 100" Padding="20" Stroke="{StaticResource BackgroundWhite}"
+                                BackgroundColor="{StaticResource BackgroundWhite}">
+                            <Image Source="plus.png" HeightRequest="20"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding IncreaseProducedQuantityCommand}"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </StackLayout>
+                </StackLayout>
+                <!--<Button Margin="20,0" Text="{local:Translate InsertProductionPage_RegisterProduction}" ImageSource="save.png"
+                        FontAttributes="Bold" FontSize="18" Padding="20" 
+                        BackgroundColor="{StaticResource LightThemeBlack}" CornerRadius="10"/>-->
+                <Border Margin="20,0" Padding="20" StrokeShape="RoundRectangle 15">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="{StaticResource Black}" Offset="0.0" />
+                            <GradientStop Color="{StaticResource LightThemeBlack}" Offset="0.5" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="10">
+                        <Image Source="save.png" HeightRequest="20"/>
+                        <Label Text="{local:Translate InsertProductionPage_RegisterProduction}" FontAttributes="Bold"
+                               Style="{StaticResource WhiteBoldTitleStyle}"/>
+                    </StackLayout>
+                </Border>
+
+            </StackLayout>
+           
+        </Border>
+        <Border IsVisible="{Binding IsDropdownOpen}" Grid.RowSpan="2" TranslationY="70"  StrokeShape="RoundRectangle 5" 
+                Margin="20,0" VerticalOptions="StartAndExpand" Padding="30,0"
+                HeightRequest="200" BackgroundColor="{StaticResource White}">
+            <CollectionView x:Name="operations" ItemsSource="{Binding SelectedOrder.operations}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Margin="0,10">
+                            <Label Text="{Binding operationName}" Style="{StaticResource BlackBoldSubtitleStyle}"
+                            FontSize="15"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectDropdownOperationCommand, 
+                                    Source={x:Reference operations}}" CommandParameter="{Binding .}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+    </Grid>
+</ContentPage>

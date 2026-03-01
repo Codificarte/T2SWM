@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"  
+             xmlns:resx="clr-namespace:T2SLogistics" NavigationPage.HasNavigationBar="False"
+             x:Class="T2SLogistics.View.Popups.ConfigurationSettingsPopup">
+    <Grid>
+        <Grid BackgroundColor="{StaticResource Gray500}" Opacity="0.7" VerticalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnClose"/>
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <Border HeightRequest="400" Stroke="Transparent" Padding="20,40" Margin="20,0"
+              BackgroundColor="{StaticResource White}" StrokeShape="RoundRectangle 10,10,10,10">
+            <StackLayout Spacing="20">
+                <Border Padding="10,7" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource White}">
+                    <Entry x:Name="apiUrlInput" TextColor="Black"/>
+
+                </Border>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button Text="Test" Clicked="SetTestUrl_Clicked"
+                            TextTransform="Uppercase" Padding="15" FontAttributes="Bold"
+                            TextColor="{StaticResource Black}" BackgroundColor="{StaticResource Gray100}"/>
+                    <Button Grid.Column="1" Text="Production" Clicked="SetProdUrl_Clicked"
+                            Padding="15" TextTransform="Uppercase" TextColor="{StaticResource White}"
+                            FontAttributes="Bold" BackgroundColor="#10B981"/>
+                </Grid>
+                <Button Text="{resx:Translate ButtonSave}" Clicked="Save_Clicked"
+                        Style="{StaticResource LightBlackThemeButtonStyle}" VerticalOptions="EndAndExpand"/>
+            </StackLayout>
+        </Border>
+    </Grid>
+</pages:PopupPage>

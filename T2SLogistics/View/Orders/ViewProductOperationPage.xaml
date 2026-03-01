@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" NavigationPage.HasNavigationBar="False"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:T2SLogistics" xmlns:CustomTemplates="clr-namespace:T2SLogistics.CustomTemplates"
+             x:Class="T2SLogistics.View.Orders.ViewProductOperationPage"
+             Title="ViewProductOperationPage" x:Name="viewProductOperationPage">
+    <Grid RowDefinitions="200,120,*" RowSpacing="10">
+        <CustomTemplates:HeaderTemplateView Grid.Row="0" IsOperatorViewVisible="True" IsTimerViewViewVisible="True"/>
+        <StackLayout VerticalOptions="StartAndExpand" Padding="10,10" HorizontalOptions="StartAndExpand">
+            <Image Source="back.png" HeightRequest="20">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="White" />
+
+                </Image.Behaviors>
+            </Image>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout  Grid.Row="1" Spacing="10" >
+          
+            <!--<Label HorizontalOptions="CenterAndExpand" FontSize="{x:OnIdiom Phone=19,Tablet=23}">
+
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{local:Translate ViewOrdersPage_ChooseThe}" FontAttributes="Bold" TextColor="{StaticResource MidnightBlue}"/>
+                        <Span Text="{local:Translate ViewOrdersPage_Product}"  FontAttributes="Bold" TextColor="{StaticResource LightBlue}"/>
+                        <Span Text="{local:Translate ViewProductOperationPage_ToPerform}"  FontAttributes="Bold" TextColor="{StaticResource MidnightBlue}"/>
+
+                    </FormattedString>
+                </Label.FormattedText>
+
+            </Label>-->
+            <Border BackgroundColor="White" Stroke="{StaticResource LightBlue}" StrokeThickness="2"
+                    StrokeShape="RoundRectangle 50" Padding="10,0,5,0" >
+                <Border.Margin>
+                    <OnIdiom x:TypeArguments="Thickness">
+                        <OnIdiom.Phone>20, 10, 20, 0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>130, 10, 130, 0</OnIdiom.Tablet>
+                    </OnIdiom>
+                </Border.Margin>
+                <Grid ColumnDefinitions="*,40" ColumnSpacing="10" >
+                    <Entry Placeholder="{local:Translate ViewOrdersPage_ChooseTheProductOrder}" 
+                          PlaceholderColor="{StaticResource Gray500}" Text="{Binding SearchOperationInputText}"/>
+                    <Border StrokeShape="RoundRectangle 70" HeightRequest="40" Stroke="Transparent"
+                BackgroundColor="{StaticResource LightBlue}" Grid.Column="1">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SearchOperationListCommand}"/>
+                        </Border.GestureRecognizers>
+                        <Image Source="search.png" HeightRequest="13" Aspect="AspectFit">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="White" />
+                            </Image.Behaviors>
+                        </Image>
+
+                    </Border>
+
+                </Grid>
+            </Border>
+        </StackLayout>
+        <Grid Grid.Row="2" BackgroundColor="{StaticResource Secondary}">
+            <CollectionView  ItemsSource="{Binding ViewProductOperations}" >
+                <CollectionView.Margin>
+                    <OnIdiom x:TypeArguments="Thickness">
+                        <OnIdiom.Phone>10, 10, 10, 0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>50, 10, 50, 0</OnIdiom.Tablet>
+                    </OnIdiom>
+                </CollectionView.Margin>
+                <CollectionView.ItemsLayout>
+                    <OnIdiom x:TypeArguments="ItemsLayout">
+                        <OnIdiom.Phone>
+                            <GridItemsLayout Orientation="Vertical" Span="1" />
+                        </OnIdiom.Phone>
+                        <OnIdiom.Tablet>
+                            <GridItemsLayout Orientation="Vertical" Span="2" />
+                        </OnIdiom.Tablet>
+                    </OnIdiom>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 10"  Stroke="Transparent" HeightRequest="100" BackgroundColor="White" Margin="10" Padding="10">
+
+                            <Grid>
+                                <Border StrokeShape="RoundRectangle 100" HeightRequest="13" Margin="10" WidthRequest="13" 
+                                        Stroke="Transparent"  HorizontalOptions="End" VerticalOptions="Start">
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding isClosed}" Value="true">
+                                            <Setter Property="BackgroundColor" Value="#60C48F"/>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding isClosed}" Value="false">
+                                            <Setter Property="BackgroundColor" Value="Red"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                </Border>
+                                <StackLayout>
+                                    <!--<Label Text="{Binding id}" FontSize="15" Style="{StaticResource BlackBoldTitleStyle}"/>-->
+                                    <Label Text="{Binding operationName}" FontSize="17" VerticalOptions="CenterAndExpand" 
+                                           FontAttributes="Bold" HorizontalOptions="CenterAndExpand" Style="{StaticResource BlueLabelStyle}"/>
+
+
+                                </StackLayout>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.AddProductQtyModelCommand, 
+                           Source={x:Reference viewProductOperationPage}}" CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
+                            </Grid>
+
+                        </Border>
+                        <!--<Border StrokeShape="RoundRectangle 10"  Stroke="Transparent" Padding="20" BackgroundColor="White" Margin="10">
+                            <StackLayout Spacing="20">
+                                <Grid ColumnDefinitions="50,*" ColumnSpacing="10">
+                                    <Border Stroke="Transparent" StrokeShape="RoundRectangle 15" HeightRequest="50" 
+                                            BackgroundColor="{StaticResource PrimaryPurple}" Padding="10">
+                                        <Image  Source="{Binding image}" HeightRequest="20"/>
+                                    </Border>
+                                    <StackLayout Grid.Column="1">
+                                        <Label  Text="{Binding description}" FontAttributes="Bold" TextColor="{StaticResource MidnightBlue}"
+                                                FontSize="15" Style="{StaticResource BlackBoldTitleStyle}"/>
+                                        <Label Text="{Binding name}" VerticalOptions="EndAndExpand" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource PrimaryPurple}"/>
+                                    </StackLayout>
+                                   
+                                </Grid>
+                                <Grid ColumnDefinitions="auto,auto,auto" HorizontalOptions="CenterAndExpand" ColumnSpacing="30">
+                                    <StackLayout>
+                                        <Label Text="25 892" Style="{StaticResource BlackBoldTitleStyle}" FontSize="15"/>
+                                        <Label HorizontalOptions="CenterAndExpand" Text="{local:Translate ViewProductOperationPage_Available}" 
+                                               FontSize="12" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1" >
+                                        <Label Text="25 806" Style="{StaticResource BlackBoldTitleStyle}" FontSize="15"/>
+                                        <Label HorizontalOptions="CenterAndExpand" Text="{local:Translate ViewProductOperationPage_Inprocess}"
+                                               FontSize="12" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="2" >
+                                        <Label Text="28 692" Style="{StaticResource BlackBoldTitleStyle}" FontSize="15"/>
+                                        <Label HorizontalOptions="CenterAndExpand" Text="{local:Translate ViewProductOperationPage_Total}" 
+                                               FontSize="12" Style="{StaticResource GrayRegularHeadingStyle}"/>
+
+                                    </StackLayout>
+                                </Grid>
+                                <ProgressBar Progress="{Binding progress}" ProgressColor="{StaticResource DarkGreenBorderColor}"/>
+                                <Border HorizontalOptions="StartAndExpand" BackgroundColor="{StaticResource LightGreenBorderColor}" Padding="10,5" Stroke="Transparent" 
+                                        StrokeShape="RoundRectangle 30">
+                                    <Label Text="{local:Translate ViewProductOperationPage_Available}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource DarkGreenBorderColor}"/>
+                                </Border>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SelectProductOperationCommand, 
+                           Source={x:Reference viewProductOperationPage}}" CommandParameter="{Binding .}"/>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                           
+
+                        </Border>-->
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>
