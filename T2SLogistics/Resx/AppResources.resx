@@ -134,6 +134,9 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="ConfigEnvironment" xml:space="preserve">
+    <value>Environment</value>
+  </data>
 
 	<data name="LoginPage_ForgotPassword" xml:space="preserve">
     <value>Forgot your password</value>

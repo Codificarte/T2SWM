@@ -1,5 +1,6 @@
 using Mopups.Pages;
 using Mopups.Services;
+using T2SLogistics.Helpers;
 
 namespace T2SLogistics.View.Popups;
 
@@ -11,6 +12,7 @@ public partial class ConfigurationSettingsPopup : PopupPage
     }
     protected override void OnAppearing()
     {
+        envPicker.ItemsSource = ApiEnvironments.All;
         apiUrlInput.Text= App.settingsService.BaseUrl;
         base.OnAppearing();
     }
@@ -25,13 +27,9 @@ public partial class ConfigurationSettingsPopup : PopupPage
 
     }
 
-    private void SetTestUrl_Clicked(object sender, EventArgs e)
+    private void EnvPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
-        apiUrlInput.Text = "https://devapi.codificarte.pt/DevApiDD/api/";
-    }
-
-    private void SetProdUrl_Clicked(object sender, EventArgs e)
-    {
-        apiUrlInput.Text = "http://durodesigners.createinfor.pt:44301/api/";
+        if (envPicker.SelectedItem is ApiEnvironment env)
+            apiUrlInput.Text = env.Url;
     }
 }

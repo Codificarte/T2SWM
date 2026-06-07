@@ -14,12 +14,9 @@ namespace T2SLogistics.Services.ApiServices
     public class RequestProvider : IRequestProvider
     {
         private  ISettingsService _settingsService;
-        private string _baseUrl;
         public RequestProvider(ISettingsService settingsService)
         {
             _settingsService = settingsService;
-            _baseUrl = settingsService.BaseUrl;
-
         }
         public async Task<T> Delete<T>(string endpoint)
         {
@@ -29,7 +26,7 @@ namespace T2SLogistics.Services.ApiServices
                 {
                     httpClient.DefaultRequestHeaders.Accept.Clear();
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    httpClient.BaseAddress = new Uri(_baseUrl);
+                    httpClient.BaseAddress = new Uri(_settingsService.BaseUrl);
 
                     if (!string.IsNullOrEmpty(_settingsService.AuthToken))
                         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);
@@ -58,7 +55,7 @@ namespace T2SLogistics.Services.ApiServices
                 {
                     httpClient.DefaultRequestHeaders.Accept.Clear();
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    httpClient.BaseAddress = new Uri(_baseUrl);
+                    httpClient.BaseAddress = new Uri(_settingsService.BaseUrl);
 
                     if (!string.IsNullOrEmpty(_settingsService.AuthToken))
                         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);

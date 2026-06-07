@@ -8,6 +8,6 @@ namespace T2SLogistics.Helpers
 {
     public class AppConstants
     {
-        public const string ApiBaseUrl = "https://devapi.codificarte.pt/DevApiDD/api/";
+        public static readonly string ApiBaseUrl = ApiEnvironments.Default.Url;
     }
 }
