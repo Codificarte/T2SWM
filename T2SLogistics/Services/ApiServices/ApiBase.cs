@@ -2,8 +2,8 @@
 {
     public class ApiBase
     {
-        public const string AuthLoginKey = "Auth/login";
-        public const string AuthResetPasswordKey = "Auth/reset-passwordv2";
+        public const string AuthLoginKey = "auth/login";
+        public const string AuthSetInitialPasswordKey = "auth/set-initial-password";
         public const string PhcOrdersKey = "PhcOrders/GetOrdersProd";
         public const string PhcOrdersByCodeKey = "PhcOrders/GetOrdersProd/{0}";
 

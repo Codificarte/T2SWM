@@ -403,4 +403,13 @@
       <value>Saved data</value>
   </data>
   
+  <data name="MustChangePasswordPrompt" xml:space="preserve">
+    <value>You must change your password before continuing.</value>
+  </data>
+  <data name="SetInitialPasswordSuccess" xml:space="preserve">
+    <value>Password set successfully.</value>
+  </data>
+  <data name="SetInitialPasswordError" xml:space="preserve">
+    <value>Could not set the password.</value>
+  </data>
 </root>

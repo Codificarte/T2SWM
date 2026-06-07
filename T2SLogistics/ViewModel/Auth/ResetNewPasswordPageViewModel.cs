@@ -59,20 +59,22 @@ namespace T2SLogistics.ViewModel.Auth
             else
             {
                 IsBusy = true;
-                var resetPasswordRequestModel = new Model.ResetPasswordRequestModel
+                var request = new Model.SetInitialPasswordRequestModel
                 {
-                    email = Email,
-                    token = string.Empty,
+                    username = Email,
                     newPassword = NewPassword
                 };
-                var response = await AuthService.ResetPassword(resetPasswordRequestModel);
-                if (!string.IsNullOrWhiteSpace(response)) 
+                var ok = await AuthService.SetInitialPassword(request);
+                if (ok)
                 {
-                    await Application.Current?.MainPage?.DisplayAlert("Success", response, "OK");
+                    await Application.Current?.MainPage?.DisplayAlert("Success", LocalizationResourceManager.Instance["SetInitialPasswordSuccess"], "OK");
                     await _navigationService.NavigateBack();
-
                 }
-                IsBusy = true;
+                else
+                {
+                    await Application.Current?.MainPage?.DisplayAlert("Error", LocalizationResourceManager.Instance["SetInitialPasswordError"], "OK");
+                }
+                IsBusy = false;
 
             }
 

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace T2SLogistics.Model
 {
-    public class ResetPasswordRequestModel
+    public class SetInitialPasswordRequestModel
     {
-        public string email { get; set; }
-        public string token { get; set; }
+        public string username { get; set; }
         public string newPassword { get; set; }
     }
 }

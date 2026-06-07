@@ -141,7 +141,7 @@ namespace T2SLogistics.ViewModel.Auth
                 {
                     var authModel = new AuthRequestModel
                     {
-                        email = Email,
+                        username = Email,
                         password = Password,
                     };
                     var authResponse = await AuthService.Login(authModel);
@@ -150,13 +150,13 @@ namespace T2SLogistics.ViewModel.Auth
                         if (authResponse.mustChangePassword)
                         {
                             IsBusy = false;
-                            await Application.Current?.MainPage?.DisplayAlert("Alert", authResponse.message, "OK");
+                            await Application.Current?.MainPage?.DisplayAlert("Alert", LocalizationResourceManager.Instance["MustChangePasswordPrompt"], "OK");
                             await _navigationService.NavigateToPage<ResetNewPasswordPage>(Email);
                             return;
                         }
                         _settingsService.AuthToken = authResponse.token;
-                        _settingsService.Username = authResponse.username;
-                        _settingsService.Email = authResponse.email;
+                        _settingsService.Username = Email;
+                        _settingsService.Email = Email;
                         Application.Current.MainPage =new NavigationPage(_services.GetService<HomePage>());
                         return;
                     }

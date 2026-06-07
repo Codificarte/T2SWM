@@ -395,4 +395,13 @@
 	<data name="CustomerOrderDetail_SavedData" xml:space="preserve">
       <value>Dados guardados</value>
   </data>
+  <data name="MustChangePasswordPrompt" xml:space="preserve">
+    <value>Tem de alterar a sua password antes de continuar.</value>
+  </data>
+  <data name="SetInitialPasswordSuccess" xml:space="preserve">
+    <value>Password definida com sucesso.</value>
+  </data>
+  <data name="SetInitialPasswordError" xml:space="preserve">
+    <value>Não foi possível definir a password.</value>
+  </data>
 </root>
