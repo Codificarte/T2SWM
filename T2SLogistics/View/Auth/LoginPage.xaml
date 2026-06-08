@@ -59,6 +59,13 @@
                 <Button Command="{Binding LoginCommand}"  TextTransform="Uppercase" Padding="0"
          Style="{StaticResource LightBlackThemeButtonStyle}" Text="{local:Translate StringLogin}"/>
 
+                <Label Text="{local:Translate LoginPage_FirstAccess}" Style="{StaticResource BlueLinkStyle}"
+                       FontSize="12" HorizontalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FirstAccessCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
 
                 <!--<Grid ColumnDefinitions="*,30,*" IsVisible="{x:OnIdiom Phone=true, Tablet=false}">
                     <BoxView Color="{StaticResource Gray200}" HeightRequest="1"  />

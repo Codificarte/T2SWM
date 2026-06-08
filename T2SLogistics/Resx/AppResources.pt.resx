@@ -140,6 +140,9 @@
 	<data name="LoginPage_ForgotPassword" xml:space="preserve">
     <value>Esqueceu a senha</value>
   </data>
+  <data name="LoginPage_FirstAccess" xml:space="preserve">
+    <value>1.º acesso? Definir palavra-passe</value>
+  </data>
    <data name="LoginPage_RememberMe" xml:space="preserve">
     <value>Lembrar-me</value>
   </data>

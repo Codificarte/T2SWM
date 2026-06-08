@@ -35,6 +35,7 @@ namespace T2SLogistics.ViewModel.Auth
             SelectLanguageCommand = new Command(ExecuteSelectLanguageCommand);
 
             ConfigPopupCommand = new Command(ExecuteConfigPopupCommand);
+            FirstAccessCommand = new Command(ExecuteFirstAccessCommand);
             Day = DateTime.Now.DayOfWeek.ToString();
             Date = DateTime.Now.ToString("dd MMMM yyyy");
             AppVersion = AppInfo.VersionString;
@@ -120,7 +121,27 @@ namespace T2SLogistics.ViewModel.Auth
             var configurationSettingsPopup = new ConfigurationSettingsPopup();
             await MopupService.Instance.PushAsync(configurationSettingsPopup);
         }
-        
+
+        // 1.º acesso: operadores são provisionados SEM password. Esta entrada leva o operador
+        // (com o email já escrito no login) ao ecrã de definir password (set-initial-password),
+        // sem passar pelo login normal — que falharia por não haver password.
+        public ICommand FirstAccessCommand { get; }
+        private async void ExecuteFirstAccessCommand()
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                await Application.Current?.MainPage?.DisplayAlert("Alert", "Please enter a email", "OK");
+                return;
+            }
+            if (!ValidationHelper.IsValidEmail(Email))
+            {
+                await Application.Current?.MainPage?.DisplayAlert("Alert", "Please enter a valid email address format.", "OK");
+                return;
+            }
+
+            await _navigationService.NavigateToPage<ResetNewPasswordPage>(Email);
+        }
+
         public ICommand LoginCommand { get; }
         private async void ExecuteLoginCommand()
         {
