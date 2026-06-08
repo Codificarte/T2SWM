@@ -76,11 +76,20 @@ namespace T2SLogistics.ViewModel.CustomerOrders
             }
         }
         public ICommand ExpandOrderItemCommand=>new Command<CustomersOrderModel>(ExecuteExpandOrderItemCommand);
-        private void ExecuteExpandOrderItemCommand(CustomersOrderModel customersOrderModel)
+        private async void ExecuteExpandOrderItemCommand(CustomersOrderModel customersOrderModel)
         {
-            if (customersOrderModel != null)
+            if (customersOrderModel == null)
             {
-                customersOrderModel.IsExpanded = !customersOrderModel.IsExpanded;
+                return;
+            }
+
+            customersOrderModel.IsExpanded = !customersOrderModel.IsExpanded;
+
+            // Carregamento lazy: ao expandir pela 1.ª vez, vai buscar as linhas ao endpoint de detalhe.
+            if (customersOrderModel.IsExpanded &&
+                (customersOrderModel.orderItems == null || customersOrderModel.orderItems.Count == 0))
+            {
+                customersOrderModel.orderItems = await customerOrderService.GetCustomerOrderDetail(customersOrderModel.phcOrderId);
             }
         }
         public ICommand CustomerOrderDetailCommand=> new Command<CustomersOrderModel>(ExecuteCustomerOrderDetailCommand);
@@ -124,7 +133,7 @@ namespace T2SLogistics.ViewModel.CustomerOrders
         public override async Task Initialise()
         {
             IsBusy = true;
-            customersOrders = await customerOrderService.GetCustomerOrder();
+            customersOrders = await customerOrderService.GetCustomerOrders();
             if (customersOrders != null)
             {
                 if (customersOrders.Count > 0)

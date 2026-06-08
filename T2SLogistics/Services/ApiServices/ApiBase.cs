@@ -7,7 +7,11 @@
         public const string PhcOrdersKey = "PhcOrders/GetOrdersProd";
         public const string PhcOrdersByCodeKey = "PhcOrders/GetOrdersProd/{0}";
 
+        // Antiga (API antiga) — ainda usada pelo fluxo de separação/expedição (Épico 3).
         public const string GetCustomerOrdersKey = "PhcOrders/GetCustomerOrders";
+        // Nova API (leitura) — lista leve + detalhe com linhas.
+        public const string CustomerOrdersReadKey = "customer-orders";
+        public const string CustomerOrderDetailKey = "customer-orders/{0}";
         public const string CreateUsersAppTimerKey= "UsersAppTimer/create";
         public const string ProductionEntriesKey = "ProductionEntries";
         public const string AddSeprationItemsKey = "PhcOrders/AddReadSeparationItems";

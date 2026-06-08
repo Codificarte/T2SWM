@@ -66,7 +66,12 @@ namespace T2SLogistics.Model
         public DateTime orderDate { get; set; }
         public DateTime dateCustomer { get; set; }
         public DateTime deliveryDate { get; set; }
-        public List<OrderItem> orderItems { get; set; }
+        private List<OrderItem> _orderItems;
+        public List<OrderItem> orderItems
+        {
+            get => _orderItems;
+            set => SetProperty(ref _orderItems, value);
+        }
         public List<ItemsRead> itemsRead { get; set; }
         public string status { get; set; }
         public int idStatus { get; set; }
