@@ -43,7 +43,7 @@ namespace T2SLogistics.ViewModel.Auth
             //Email = "ddulla@t2s.pt";
             //Password = "Dev1#2025!";
 
-            Email = "fabrica1@durodesigners.com";
+            Email = "suporte@t2s.pt";
             Password = "DuroD#2025!";
 #endif
             if (!string.IsNullOrEmpty(settingsService.Applanguage))

@@ -18,8 +18,10 @@ public partial class ConfigurationSettingsPopup : PopupPage
     }
     private async void Save_Clicked(object sender, EventArgs e)
     {
-        App.settingsService.BaseUrl= apiUrlInput.Text;
+        App.settingsService.BaseUrl = apiUrlInput.Text?.Trim();
         await MopupService.Instance.PopAsync();
+        // Confirmação: mostra o valor efetivamente persistido (lido de volta das Preferences).
+        await Application.Current?.MainPage?.DisplayAlert("Config", $"URL guardada:\n{App.settingsService.BaseUrl}", "OK");
     }
     private void OnClose(object sender, TappedEventArgs e)
     {
