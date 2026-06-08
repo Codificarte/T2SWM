@@ -33,7 +33,10 @@ namespace T2SLogistics
                 LocalizationResourceManager.Instance.SetCulture(new CultureInfo(settingsService.Applanguage));
 
             }
-            if (string.IsNullOrEmpty(settingsService.BaseUrl))
+            // Travão do servidor: a BaseUrl tem de apontar sempre para a nova API. Se estiver vazia,
+            // ou se for um servidor da API antiga (ex.: device com a API antiga persistida), é
+            // substituída pelo Default — garante que a API antiga nunca é contactada.
+            if (string.IsNullOrEmpty(settingsService.BaseUrl) || ApiEnvironments.IsLegacy(settingsService.BaseUrl))
             {
                 settingsService.BaseUrl = AppConstants.ApiBaseUrl;
             }

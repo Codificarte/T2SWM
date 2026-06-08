@@ -404,4 +404,10 @@
   <data name="SetInitialPasswordError" xml:space="preserve">
     <value>Não foi possível definir a password.</value>
   </data>
+  <data name="MigrationNoticeTitle" xml:space="preserve">
+    <value>Funcionalidade em migração</value>
+  </data>
+  <data name="MigrationNoticeMessage" xml:space="preserve">
+    <value>Esta funcionalidade está a ser migrada para o novo sistema e ainda não está disponível.</value>
+  </data>
 </root>

@@ -412,4 +412,10 @@
   <data name="SetInitialPasswordError" xml:space="preserve">
     <value>Could not set the password.</value>
   </data>
+  <data name="MigrationNoticeTitle" xml:space="preserve">
+    <value>Feature being migrated</value>
+  </data>
+  <data name="MigrationNoticeMessage" xml:space="preserve">
+    <value>This feature is being migrated to the new system and is not available yet.</value>
+  </data>
 </root>
