@@ -28,17 +28,25 @@ namespace T2SLogistics.Services.ApiServices
                 return null;
             }
         }
-        public async Task<bool> SetInitialPassword(SetInitialPasswordRequestModel request)
+        // Devolve (Ok, Error): Ok=true em sucesso; senão Error traz o motivo real da API quando existe.
+        public async Task<(bool Ok, string Error)> SetInitialPassword(SetInitialPasswordRequestModel request)
         {
             try
             {
                 var jsonObject = Newtonsoft.Json.JsonConvert.SerializeObject(request);
-                // set-initial-password devolve 200 sem corpo; PostAsync sinaliza sucesso via status code.
-                return await _requestProvider.PostAsync<object>(AuthSetInitialPasswordKey, jsonObject);
+                // 200 sem corpo → desserializa para null = sucesso. 400 → corpo com message/errors = falha.
+                var result = await _requestProvider.Post<SetInitialPasswordResultModel>(AuthSetInitialPasswordKey, jsonObject);
+                if (result == null)
+                    return (true, null);
+
+                var error = result.errors != null && result.errors.Count > 0
+                    ? string.Join("\n", result.errors)
+                    : result.message;
+                return (false, error);
             }
             catch (Exception ex)
             {
-                return false;
+                return (false, null);
             }
         }
     }

@@ -64,7 +64,7 @@ namespace T2SLogistics.ViewModel.Auth
                     username = Email,
                     newPassword = NewPassword
                 };
-                var ok = await AuthService.SetInitialPassword(request);
+                var (ok, error) = await AuthService.SetInitialPassword(request);
                 if (ok)
                 {
                     await Application.Current?.MainPage?.DisplayAlert("Success", LocalizationResourceManager.Instance["SetInitialPasswordSuccess"], "OK");
@@ -72,7 +72,11 @@ namespace T2SLogistics.ViewModel.Auth
                 }
                 else
                 {
-                    await Application.Current?.MainPage?.DisplayAlert("Error", LocalizationResourceManager.Instance["SetInitialPasswordError"], "OK");
+                    // Mostra o motivo real da API quando existe; senão, a mensagem genérica localizada.
+                    var message = string.IsNullOrWhiteSpace(error)
+                        ? LocalizationResourceManager.Instance["SetInitialPasswordError"]
+                        : error;
+                    await Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
                 }
                 IsBusy = false;
 
