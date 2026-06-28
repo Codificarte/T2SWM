@@ -103,6 +103,11 @@ public partial class ReceptionReadingViewModel : ViewModelBase, IQueryAttributab
     private void OnBarcodeScanned(string code) =>
         MainThread.BeginInvokeOnMainThread(async () => await HandleScanAsync(code));
 
+    /// <summary>Entrada manual (Enter no campo): trata o código escrito como uma leitura — mesmo
+    /// parsing GS1 via API que um scan, em vez de ir cru para o registo.</summary>
+    public void SubmitManualScan() =>
+        MainThread.BeginInvokeOnMainThread(async () => await HandleScanAsync(Barcode));
+
     // A App nunca interpreta GS1 localmente (FR-10): reencaminha o payload cru à API e preenche a
     // identificação do Artigo + Lote/Validade conforme devolvido. Cada leitura identifica um novo
     // artigo, por isso os campos derivados (Lote/Validade) são SEMPRE repostos a partir da resposta —

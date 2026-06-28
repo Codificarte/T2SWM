@@ -23,4 +23,7 @@ public partial class ReceptionReadingPage : ContentPage
         base.OnDisappearing();
         _viewModel.Deactivate();
     }
+
+    // Enter no campo de código → trata a entrada manual como uma leitura (parsing GS1 via API).
+    private void OnBarcodeCompleted(object? sender, EventArgs e) => _viewModel.SubmitManualScan();
 }

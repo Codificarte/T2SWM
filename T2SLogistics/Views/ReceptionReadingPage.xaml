@@ -24,7 +24,8 @@
                 <Entry Text="{Binding Barcode}"
                        Placeholder="Ler ou escrever o código"
                        FontSize="15"
-                       ReturnType="Next" />
+                       ReturnType="Go"
+                       Completed="OnBarcodeCompleted" />
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                     <VerticalStackLayout Grid.Column="0">
