@@ -21,6 +21,9 @@ namespace T2SLogistics.Services.ApiServices
         // Nova API (escrita) — Receção (Épico 2): iniciar a partir de enc. fornecedor + registar leituras.
         public const string ReceptionsKey = "receptions";
         public const string ReceptionReadingsKey = "receptions/{0}/readings";
+        // Nova API (leitura) — parsing de código de barras / QR GS1 (Story 1.8). A App envia o payload
+        // cru e a API devolve GTIN/Lote/Validade/Nº Série separados.
+        public const string ScansParseKey = "scans/parse";
         public const string CreateUsersAppTimerKey= "UsersAppTimer/create";
         public const string ProductionEntriesKey = "ProductionEntries";
         public const string AddSeprationItemsKey = "PhcOrders/AddReadSeparationItems";
@@ -35,7 +38,7 @@ namespace T2SLogistics.Services.ApiServices
         // Rotas já migradas para a NOVA API. SÓ estas podem sair para a rede; qualquer outra rota
         // (ainda da API antiga) é bloqueada no RequestProvider e mostra "em migração". Ao migrar
         // uma feature, acrescentar aqui o prefixo da sua rota nova.
-        private static readonly string[] MigratedRoutePrefixes = { "auth/", "customer-orders", "supplier-orders", "receptions" };
+        private static readonly string[] MigratedRoutePrefixes = { "auth/", "customer-orders", "supplier-orders", "receptions", "scans" };
 
         /// <summary>True se a rota já foi migrada para a nova API (pode sair para a rede).</summary>
         public static bool IsRouteMigrated(string endpoint)

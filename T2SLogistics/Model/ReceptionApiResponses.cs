@@ -35,6 +35,18 @@ namespace T2SLogistics.Model
         public DateTime readAtUtc { get; set; }
     }
 
+    /// <summary>Resposta do parsing de uma Leitura (POST api/scans/parse). FR-10. A App não interpreta GS1.</summary>
+    public class ParsedScanApiResponse
+    {
+        public string? raw { get; set; }
+        public string? articleCode { get; set; }
+        public bool isGs1 { get; set; }
+        public string? gtin { get; set; }
+        public string? lote { get; set; }
+        public DateTime? expiryDate { get; set; }
+        public string? serialNumber { get; set; }
+    }
+
     /// <summary>Corpo de erro padrão da API (ex.: 422/400 devolvem <c>{ "message": "..." }</c>).</summary>
     public class ApiMessageResponse
     {

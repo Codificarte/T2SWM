@@ -41,3 +41,20 @@ public sealed class ReceptionReadingResult
     public int ReceivedQuantity { get; init; }
     public string LineStatus { get; init; } = string.Empty; // "completo" / "incompleto"
 }
+
+/// <summary>
+/// Resultado de interpretar uma Leitura na API (FR-10). Em sucesso traz a identificação do Artigo
+/// (GTIN para GS1, ou o próprio código) + Lote/Validade/Nº Série conforme presentes; em erro traz a
+/// <see cref="Message"/> pronta para mostrar. A App nunca interpreta GS1 localmente.
+/// </summary>
+public sealed class ParsedScanResult
+{
+    public bool Success { get; init; }
+    public string? Message { get; init; }
+    public string ArticleCode { get; init; } = string.Empty;
+    public bool IsGs1 { get; init; }
+    public string? Gtin { get; init; }
+    public string? Lote { get; init; }
+    public DateTime? ExpiryDate { get; init; }
+    public string? SerialNumber { get; init; }
+}

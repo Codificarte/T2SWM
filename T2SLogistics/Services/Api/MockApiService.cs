@@ -73,6 +73,16 @@ public sealed class MockApiService : IApiService
         return Task.FromResult(result);
     }
 
+    public Task<ParsedScanResult?> ParseScanAsync(
+        string payload, CancellationToken cancellationToken = default)
+    {
+        // Demonstração: trata o payload como código simples (não interpreta GS1).
+        ParsedScanResult? result = string.IsNullOrWhiteSpace(payload)
+            ? null
+            : new ParsedScanResult { Success = true, ArticleCode = payload.Trim(), IsGs1 = false };
+        return Task.FromResult(result);
+    }
+
     private static IReadOnlyList<OrderSummary> BuildOrders(LogisticsModule module, OrderParty party)
     {
         var prefix = module switch

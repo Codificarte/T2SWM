@@ -37,4 +37,14 @@ public interface IApiService
         string receptionId,
         ReceptionReadingInput input,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Interpreta uma Leitura (código de barras / QR GS1) na API (POST api/scans/parse) — FR-10. A App
+    /// envia o payload cru e nunca interpreta GS1 localmente. Em sucesso devolve a identificação do Artigo
+    /// + Lote/Validade/Nº Série conforme presentes; em conteúdo malformado/erro, traz a mensagem tratada.
+    /// Devolve <c>null</c> se não houver nada a interpretar (payload vazio).
+    /// </summary>
+    Task<ParsedScanResult?> ParseScanAsync(
+        string payload,
+        CancellationToken cancellationToken = default);
 }

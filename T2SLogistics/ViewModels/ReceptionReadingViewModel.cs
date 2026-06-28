@@ -98,8 +98,53 @@ public partial class ReceptionReadingViewModel : ViewModelBase, IQueryAttributab
         _scanner.BarcodeScanned -= OnBarcodeScanned;
     }
 
+    private bool _processingScan;
+
     private void OnBarcodeScanned(string code) =>
-        MainThread.BeginInvokeOnMainThread(() => Barcode = code);
+        MainThread.BeginInvokeOnMainThread(async () => await HandleScanAsync(code));
+
+    // A App nunca interpreta GS1 localmente (FR-10): reencaminha o payload cru à API e preenche a
+    // identificação do Artigo + Lote/Validade conforme devolvido. Cada leitura identifica um novo
+    // artigo, por isso os campos derivados (Lote/Validade) são SEMPRE repostos a partir da resposta —
+    // não arrastam valores da leitura anterior. Guarda de reentrância evita corridas entre scans
+    // sucessivos. Conteúdo malformado → mensagem tratada.
+    private async Task HandleScanAsync(string code)
+    {
+        if (_processingScan || string.IsNullOrWhiteSpace(code))
+            return;
+
+        try
+        {
+            _processingScan = true;
+
+            var parsed = await _api.ParseScanAsync(code.Trim());
+            if (parsed is null)
+                return;
+
+            if (!parsed.Success)
+            {
+                SetStatus(parsed.Message ?? "Não foi possível interpretar a leitura.", isError: true);
+                return;
+            }
+
+            Lote = parsed.Lote ?? string.Empty;
+            HasExpiry = parsed.ExpiryDate is not null;
+            ExpiryDate = parsed.ExpiryDate?.Date ?? DateTime.Today;
+            Barcode = parsed.ArticleCode;
+
+            SetStatus(
+                string.IsNullOrWhiteSpace(parsed.ArticleCode) ? "Leitura sem identificação de artigo." : string.Empty,
+                isError: string.IsNullOrWhiteSpace(parsed.ArticleCode));
+        }
+        catch (Exception ex)
+        {
+            T2SLogistics.Helpers.AppLog.Error(nameof(HandleScanAsync), ex);
+        }
+        finally
+        {
+            _processingScan = false;
+        }
+    }
 
     [RelayCommand]
     private async Task RecordReading()

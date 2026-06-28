@@ -185,6 +185,67 @@ public sealed class ApiService : IApiService
         }
     }
 
+    public async Task<ParsedScanResult?> ParseScanAsync(
+        string payload, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(payload))
+            return null;
+
+        try
+        {
+            // A App envia o payload cru; o parsing GS1 é exclusivamente do servidor (FR-10).
+            var body = JsonConvert.SerializeObject(new { payload });
+            var res = await _requestProvider.PostWithStatus(ApiBase.ScansParseKey, body);
+
+            if (res.IsSuccess)
+            {
+                var dto = JsonConvert.DeserializeObject<ParsedScanApiResponse>(res.Body);
+                if (dto is null)
+                    return new ParsedScanResult { Success = false, Message = "Resposta inválida do servidor." };
+
+                return new ParsedScanResult
+                {
+                    Success = true,
+                    ArticleCode = dto.articleCode ?? string.Empty,
+                    IsGs1 = dto.isGs1,
+                    Gtin = dto.gtin,
+                    Lote = dto.lote,
+                    ExpiryDate = dto.expiryDate,
+                    SerialNumber = dto.serialNumber,
+                };
+            }
+
+            return new ParsedScanResult { Success = false, Message = ExtractParseMessage(res) };
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(ParseScanAsync), ex);
+            return new ParsedScanResult { Success = false, Message = "Erro de comunicação com o servidor." };
+        }
+    }
+
+    // Mensagem de erro do parsing para o operador (o malformado/400/422 traz {message} do servidor).
+    private static string ExtractParseMessage(HttpCallResult res)
+    {
+        if (res.IsBlocked)
+            return "Funcionalidade em migração.";
+        if (res.StatusCode == 401)
+            return "Sessão expirada. Inicie sessão novamente.";
+
+        if (!string.IsNullOrWhiteSpace(res.Body))
+        {
+            try
+            {
+                var msg = JsonConvert.DeserializeObject<ApiMessageResponse>(res.Body)?.message;
+                if (!string.IsNullOrWhiteSpace(msg))
+                    return msg!;
+            }
+            catch { /* corpo não-JSON: cai no genérico */ }
+        }
+
+        return "Não foi possível interpretar a leitura.";
+    }
+
     // Traduz uma resposta não-2xx numa mensagem para o operador (usa o corpo {message} quando existe).
     private static string ExtractMessage(HttpCallResult res)
     {
