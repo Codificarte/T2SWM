@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.ReceptionReadingPage"
+             x:DataType="vm:ReceptionReadingViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!--  Formulário de leitura  -->
+        <Border Grid.Row="0"
+                BackgroundColor="{StaticResource CardBg}"
+                Stroke="{StaticResource Border}"
+                StrokeThickness="1"
+                Margin="12,12,12,6">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="11" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Padding="12" Spacing="8">
+
+                <Label Text="Código de barras" FontSize="10" TextColor="{StaticResource TextHint}" />
+                <Entry Text="{Binding Barcode}"
+                       Placeholder="Ler ou escrever o código"
+                       FontSize="15"
+                       ReturnType="Next" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Quantidade" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <Entry Text="{Binding Quantity}" Keyboard="Numeric" FontSize="15" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Lote" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <Entry Text="{Binding Lote}" Placeholder="(se aplicável)" FontSize="15" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Margin="0,2,0,0">
+                    <Switch Grid.Column="0" IsToggled="{Binding HasExpiry}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="Validade" FontSize="13"
+                           TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                    <DatePicker Grid.Column="2"
+                                Date="{Binding ExpiryDate}"
+                                IsEnabled="{Binding HasExpiry}"
+                                Format="dd/MM/yyyy" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Alvéolo" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <Entry Text="{Binding Alveolo}" Placeholder="(se aplicável)" FontSize="15" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Observação" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <Entry Text="{Binding Observation}" Placeholder="(se incompleto)" FontSize="15" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Button Text="Registar leitura"
+                        FontSize="15"
+                        HeightRequest="46"
+                        CornerRadius="10"
+                        Margin="0,4,0,0"
+                        BackgroundColor="{StaticResource BrandRed}"
+                        TextColor="White"
+                        Command="{Binding RecordReadingCommand}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!--  Mensagem de estado (sucesso/erro do servidor)  -->
+        <Label Grid.Row="1"
+               Text="{Binding StatusMessage}"
+               TextColor="{Binding StatusColor}"
+               FontSize="13"
+               Margin="16,0,16,6"
+               IsVisible="{Binding HasStatus}" />
+
+        <!--  Previsto vs lido  -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Lines}"
+                        SelectionMode="None"
+                        Margin="12,0,12,12">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="7" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ReceptionLineViewModel">
+                    <Border BackgroundColor="{StaticResource CardBg}"
+                            Stroke="{StaticResource Border}"
+                            StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="9" />
+                        </Border.StrokeShape>
+                        <Grid Padding="10,8" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding Description}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="{Binding Code, StringFormat='Cód. {0}'}" FontSize="10" TextColor="{StaticResource TextHint}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1"
+                                   Text="{Binding ProgressText}"
+                                   FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextMuted}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

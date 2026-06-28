@@ -144,8 +144,11 @@ namespace T2SLogistics.Services.ApiServices
                     if (!string.IsNullOrEmpty(_settingsService.AuthToken))
                         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);
 
+                    AppLog.Write($"GET {httpClient.BaseAddress}{endpoint}");
+
                     var response = await httpClient.GetAsync(endpoint);
                     var result = await response.Content.ReadAsStringAsync();
+                    AppLog.Write($"GET <- {(int)response.StatusCode} {response.ReasonPhrase} | {result?.Length ?? 0} chars");
                     var json = JsonConvert.DeserializeObject<T>(result);
                     return json;
                 }
@@ -173,6 +176,9 @@ namespace T2SLogistics.Services.ApiServices
                     if (!string.IsNullOrEmpty(_settingsService.AuthToken))
                         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);
 
+                    // Diagnóstico: URL completa para onde o request vai (BaseAddress + endpoint).
+                    AppLog.Write($"POST {httpClient.BaseAddress}{endpoint}");
+
                     var response = await httpClient.PostAsync(endpoint, new StringContent(jsonobject, Encoding.UTF8, "application/json"));
 
                     var resultStr = await response.Content.ReadAsStringAsync();
@@ -182,6 +188,36 @@ namespace T2SLogistics.Services.ApiServices
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        public async Task<HttpCallResult> PostWithStatus(string endpoint, string jsonobject)
+        {
+            if (IsBlocked(endpoint))
+                return new HttpCallResult { StatusCode = 0, Body = string.Empty };
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    httpClient.BaseAddress = new Uri(_settingsService.BaseUrl);
+                    httpClient.Timeout = TimeSpan.FromMinutes(5);
+                    if (!string.IsNullOrEmpty(_settingsService.AuthToken))
+                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);
+
+                    AppLog.Write($"POSTSTATUS {httpClient.BaseAddress}{endpoint}");
+
+                    var response = await httpClient.PostAsync(endpoint, new StringContent(jsonobject, Encoding.UTF8, "application/json"));
+                    var resultStr = await response.Content.ReadAsStringAsync();
+                    AppLog.Write($"POSTSTATUS <- {(int)response.StatusCode} {response.ReasonPhrase} | {resultStr?.Length ?? 0} chars");
+                    return new HttpCallResult { StatusCode = (int)response.StatusCode, Body = resultStr ?? string.Empty };
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error(nameof(PostWithStatus), ex);
+                return new HttpCallResult { StatusCode = -1, Body = string.Empty };
             }
         }
 
@@ -198,6 +234,8 @@ namespace T2SLogistics.Services.ApiServices
                     httpClient.BaseAddress = new Uri(_settingsService.BaseUrl);
                     if (!string.IsNullOrEmpty(_settingsService.AuthToken))
                         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _settingsService.AuthToken);
+
+                    AppLog.Write($"POSTASYNC {httpClient.BaseAddress}{url}");
 
                     var response = await httpClient.PostAsync(url, new StringContent(jsonobject, Encoding.UTF8, "application/json"));
                     response.EnsureSuccessStatusCode();

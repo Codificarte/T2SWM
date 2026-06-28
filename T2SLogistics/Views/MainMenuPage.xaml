@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.MainMenuPage"
+             x:DataType="vm:MainMenuViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource CardBg}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!--  Cabeçalho da marca — título em texto corrido  -->
+        <VerticalStackLayout Grid.Row="0"
+                             BackgroundColor="{StaticResource BrandRed}"
+                             Padding="0,14,0,14"
+                             Spacing="1">
+            <Label Text="T2S Logística"
+                   FontSize="24" FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+            <Label Text="Gestão de armazém"
+                   FontSize="13"
+                   TextColor="White" Opacity="0.85"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <!--  Lista do menu  -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Menu}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:MenuItemViewModel">
+                    <Grid Padding="12,11"
+                          ColumnDefinitions="40,*,Auto"
+                          ColumnSpacing="10">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TapCommand}" />
+                        </Grid.GestureRecognizers>
+
+                        <!--  Chip do ícone (FontImageSource via Image — ver MenuItemViewModel)  -->
+                        <Border Grid.Column="0"
+                                WidthRequest="34" HeightRequest="34"
+                                StrokeThickness="0"
+                                BackgroundColor="{StaticResource BrandRedTint}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="9" />
+                            </Border.StrokeShape>
+                            <Image Source="{Binding Icon}"
+                                   WidthRequest="18"
+                                   HeightRequest="18"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <Label Grid.Column="1"
+                               Text="{Binding Title}"
+                               FontSize="15"
+                               TextColor="{StaticResource TextPrimary}"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="&#xea61;"
+                               FontFamily="TablerIcons"
+                               FontSize="16"
+                               TextColor="#C3C8D0"
+                               VerticalOptions="Center" />
+
+                        <BoxView Grid.ColumnSpan="3"
+                                 HeightRequest="1"
+                                 Color="{StaticResource Divider}"
+                                 VerticalOptions="End"
+                                 Margin="0,0,0,-11" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  Rodapé: logótipo + versão, com linha a separar  -->
+        <VerticalStackLayout Grid.Row="2" Spacing="0">
+            <BoxView HeightRequest="1" Color="{StaticResource Divider}" />
+            <HorizontalStackLayout Padding="14,10" Spacing="8">
+                <Image Source="t2s_logo.svg"
+                       HeightRequest="18"
+                       Opacity="0.55"
+                       Aspect="AspectFit"
+                       VerticalOptions="Center" />
+                <Label Text="© 2025 T2S · v3.0"
+                       FontSize="11"
+                       TextColor="{StaticResource TextHint}"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

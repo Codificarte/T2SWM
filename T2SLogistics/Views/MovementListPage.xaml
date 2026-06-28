@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.MovementListPage"
+             x:DataType="vm:MovementListViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!--  Filtro Clientes / Fornecedores  -->
+        <HorizontalStackLayout Grid.Row="0"
+                               Padding="12,10,12,4"
+                               Spacing="6">
+            <Button Text="Clientes"
+                    FontSize="13"
+                    Padding="14,4"
+                    CornerRadius="14"
+                    BorderWidth="1"
+                    BorderColor="{StaticResource Border}"
+                    BackgroundColor="{Binding ClientsBg}"
+                    TextColor="{Binding ClientsText}"
+                    Command="{Binding ShowClientsCommand}" />
+            <Button Text="Fornecedores"
+                    FontSize="13"
+                    Padding="14,4"
+                    CornerRadius="14"
+                    BorderColor="{StaticResource Border}"
+                    BorderWidth="1"
+                    BackgroundColor="{Binding SuppliersBg}"
+                    TextColor="{Binding SuppliersText}"
+                    Command="{Binding ShowSuppliersCommand}" />
+        </HorizontalStackLayout>
+
+        <!--  Pesquisa  -->
+        <SearchBar Grid.Row="1"
+                   Margin="12,4,12,8"
+                   Placeholder="Procurar encomenda…"
+                   Text="{Binding Query}" />
+
+        <!--  Lista de encomendas  -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Orders}"
+                        SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:OrderListItemViewModel">
+                    <Border Margin="12,0"
+                            BackgroundColor="{StaticResource CardBg}"
+                            Stroke="{StaticResource Border}"
+                            StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="11" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenCommand}" />
+                        </Border.GestureRecognizers>
+
+                        <Grid Padding="11,10" RowSpacing="4"
+                              RowDefinitions="Auto,Auto,Auto"
+                              ColumnDefinitions="*,Auto">
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Number}"
+                                   FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+
+                            <!--  Badge de estado  -->
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    BackgroundColor="{Binding StatusBg}"
+                                    StrokeThickness="0"
+                                    Padding="8,2">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <Label Text="{Binding Status}"
+                                       FontSize="11"
+                                       TextColor="{Binding StatusText}" />
+                            </Border>
+
+                            <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                   Text="{Binding ClientName}"
+                                   FontSize="12"
+                                   TextColor="{StaticResource TextMuted}" />
+
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Text="{Binding DateText}"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextHint}" />
+
+                            <Label Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding ActionText}"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="{StaticResource BrandRed}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.MovementDetailPage"
+             x:DataType="vm:MovementDetailViewModel"
+             Title="{Binding Number}"
+             BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="12" Spacing="12">
+
+                <!--  Cartão resumo  -->
+                <Border BackgroundColor="{StaticResource CardBg}"
+                        Stroke="{StaticResource Border}"
+                        StrokeThickness="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="11" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="12" Spacing="2">
+                        <Label Text="{Binding ClientName}"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="{Binding Address}"
+                               FontSize="12"
+                               TextColor="{StaticResource TextMuted}" />
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6" Margin="0,10,0,0">
+                            <Border Grid.Column="0" BackgroundColor="#F6F7F9" StrokeThickness="0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <VerticalStackLayout Padding="8,7">
+                                    <Label Text="Data" FontSize="10" TextColor="{StaticResource TextHint}" />
+                                    <Label Text="{Binding DateText}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="#F6F7F9" StrokeThickness="0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <VerticalStackLayout Padding="8,7">
+                                    <Label Text="Linhas" FontSize="10" TextColor="{StaticResource TextHint}" />
+                                    <Label Text="{Binding LinesCount}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="2" BackgroundColor="{Binding StatusBg}" StrokeThickness="0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <VerticalStackLayout Padding="8,7">
+                                    <Label Text="Estado" FontSize="10" TextColor="{Binding StatusText}" Opacity="0.8" />
+                                    <Label Text="{Binding Status}" FontSize="12" FontAttributes="Bold" TextColor="{Binding StatusText}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="ARTIGOS"
+                       FontSize="11"
+                       TextColor="{StaticResource TextHint}"
+                       Margin="2,0" />
+
+                <!--  Linhas da encomenda  -->
+                <CollectionView ItemsSource="{Binding Lines}"
+                                SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="7" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:OrderLineViewModel">
+                            <Border BackgroundColor="{StaticResource CardBg}"
+                                    Stroke="{StaticResource Border}"
+                                    StrokeThickness="1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="9" />
+                                </Border.StrokeShape>
+                                <Grid Padding="10,8" ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding Description}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                        <Label Text="{Binding Code, StringFormat='Cód. {0}'}" FontSize="10" TextColor="{StaticResource TextHint}" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding ProgressText}"
+                                           FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextMuted}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!--  Ação principal: iniciar o processo (texto muda conforme o módulo)  -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource CardBg}"
+                Stroke="{StaticResource Divider}"
+                StrokeThickness="1"
+                Padding="12,10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0" />
+            </Border.StrokeShape>
+            <Button Text="{Binding ActionText}"
+                    FontSize="15"
+                    HeightRequest="48"
+                    CornerRadius="10"
+                    BackgroundColor="{StaticResource BrandRed}"
+                    TextColor="White"
+                    Command="{Binding StartCommand}" />
+        </Border>
+    </Grid>
+</ContentPage>

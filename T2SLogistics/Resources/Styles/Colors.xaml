@@ -53,4 +53,30 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <!-- ====== Paleta da nova UI (Vogistic) — ver tmp/Colors.xaml de referência ====== -->
+
+    <!--  Marca (vermelho suavizado, não carregado)  -->
+    <Color x:Key="BrandRed">#DD6A60</Color>
+    <Color x:Key="BrandRedDark">#C24A42</Color>
+    <Color x:Key="BrandRedTint">#FBEDEC</Color>
+
+    <!--  Superfícies  -->
+    <Color x:Key="PageBg">#F4F5F7</Color>
+    <Color x:Key="CardBg">#FFFFFF</Color>
+    <Color x:Key="Divider">#F0F1F4</Color>
+    <Color x:Key="Border">#E7E9ED</Color>
+
+    <!--  Texto  -->
+    <Color x:Key="TextPrimary">#2C3038</Color>
+    <Color x:Key="TextMuted">#8A909C</Color>
+    <Color x:Key="TextHint">#A7ACB5</Color>
+
+    <!--  Estados  -->
+    <Color x:Key="PendingBg">#FAEEDA</Color>
+    <Color x:Key="PendingText">#854F0B</Color>
+    <Color x:Key="ProgressBg">#E6F1FB</Color>
+    <Color x:Key="ProgressText">#0C447C</Color>
+    <Color x:Key="DoneBg">#EAF3DE</Color>
+    <Color x:Key="DoneText">#3B6D11</Color>
 </ResourceDictionary>

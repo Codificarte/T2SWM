@@ -33,28 +33,18 @@ namespace T2SLogistics
                 LocalizationResourceManager.Instance.SetCulture(new CultureInfo(settingsService.Applanguage));
 
             }
-            // Travão do servidor: a BaseUrl tem de apontar sempre para a nova API. Se estiver vazia,
-            // ou se for um servidor da API antiga (ex.: device com a API antiga persistida), é
-            // substituída pelo Default — garante que a API antiga nunca é contactada.
-            if (string.IsNullOrEmpty(settingsService.BaseUrl) || ApiEnvironments.IsLegacy(settingsService.BaseUrl))
-            {
-                settingsService.BaseUrl = AppConstants.ApiBaseUrl;
-            }
+            // A BaseUrl é definida exclusivamente pelo utilizador no ecrã de Configuração.
+            // A app assume sempre o que lá estiver — sem substituições no arranque.
             SetMainPage();
         }
         private void SetMainPage()
         {
+            // Porta de entrada por autenticação: sem token → Login; com token → Shell (menu da UI nova).
+            // O Login (auth/login, já migrado) guarda o JWT e encaminha para o AppShell ao concluir.
             if (string.IsNullOrEmpty(settingsService.AuthToken))
-            {
-                MainPage = new NavigationPage(serviceProvider.GetService<LoginPage>());
-
-            }
+                MainPage = new NavigationPage(serviceProvider.GetService<View.Auth.LoginPage>());
             else
-            {
-                MainPage = new NavigationPage(serviceProvider.GetService<HomePage>());
-
-            }
-
+                MainPage = serviceProvider.GetService<AppShell>();
         }
     }
 }

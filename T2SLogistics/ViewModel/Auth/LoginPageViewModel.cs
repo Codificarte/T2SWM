@@ -7,13 +7,7 @@ using T2SLogistics.View.Auth;
 using T2SLogistics.View.Home;
 using T2SLogistics.View.Popups;
 using Mopups.Services;
-using Microsoft.Maui.ApplicationModel;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace T2SLogistics.ViewModel.Auth
@@ -40,11 +34,10 @@ namespace T2SLogistics.ViewModel.Auth
             Date = DateTime.Now.ToString("dd MMMM yyyy");
             AppVersion = AppInfo.VersionString;
 #if DEBUG
-            //Email = "ddulla@t2s.pt";
-            //Password = "Dev1#2025!";
+     
 
             Email = "suporte@t2s.pt";
-            Password = "DuroD#2025!";
+            Password = "T2S#2025!";
 #endif
             if (!string.IsNullOrEmpty(settingsService.Applanguage))
             {
@@ -178,7 +171,8 @@ namespace T2SLogistics.ViewModel.Auth
                         _settingsService.AuthToken = authResponse.token;
                         _settingsService.Username = Email;
                         _settingsService.Email = Email;
-                        Application.Current.MainPage =new NavigationPage(_services.GetService<HomePage>());
+                        // UI nova: após login entra no Shell (menu principal), não na HomePage antiga.
+                        Application.Current.MainPage = _services.GetService<T2SLogistics.AppShell>();
                         return;
                     }
                     else

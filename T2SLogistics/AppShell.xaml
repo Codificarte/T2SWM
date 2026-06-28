@@ -4,12 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:T2SLogistics"
-    Shell.FlyoutBehavior="Flyout"
+    FlyoutBehavior="Disabled"
     Title="T2SLogistics">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <!-- O conteúdo raiz (menu) e as rotas são adicionados em AppShell.xaml.cs para passarem pelo DI. -->
 </Shell>

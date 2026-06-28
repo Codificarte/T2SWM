@@ -24,6 +24,8 @@ using T2SLogistics.ViewModel.Popups;
 using T2SLogistics.ViewModel.Register;
 using Microsoft.Extensions.Logging;
 using ZXing.Net.Maui.Controls;
+using T2SLogistics.Services.Api;
+using T2SLogistics.Services.Scanning;
 
 namespace T2SLogistics;
 
@@ -39,6 +41,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("tabler-icons.ttf", "TablerIcons");
             })
             .UseBarcodeReader();
 
@@ -104,6 +107,16 @@ public static class MauiProgram
         builder.Services.AddTransient<ProductBreaksService>();
         builder.Services.AddTransient<DbService>();
 
+        // ===== Nova UI (Shell + CommunityToolkit.Mvvm) =====
+        builder.Services.AddTransient<AppShell>();
+        builder.Services.AddTransient<Views.MainMenuPage>();
+        builder.Services.AddTransient<ViewModels.MainMenuViewModel>();
+        builder.Services.AddTransient<Views.MovementListPage>();
+        builder.Services.AddTransient<ViewModels.MovementListViewModel>();
+        builder.Services.AddTransient<Views.MovementDetailPage>();
+        builder.Services.AddTransient<ViewModels.MovementDetailViewModel>();
+        builder.Services.AddTransient<Views.ReceptionReadingPage>();
+        builder.Services.AddTransient<ViewModels.ReceptionReadingViewModel>();
     }
     private static void RegisterServices(MauiAppBuilder builder)
     {
@@ -111,7 +124,30 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<IRequestProvider, RequestProvider>();
 
+        // ===== Nova UI =====
+        // API: toda a comunicação atrás de IApiService. Implementação HTTP real sobre a nova API
+        // (api/customer-orders) via IRequestProvider. Encomendas+Clientes = dados reais do PHC;
+        // Fornecedores/Inventário ainda sem endpoint → vazios. (MockApiService fica disponível para
+        // desenvolvimento offline — trocar a linha abaixo se necessário.)
+        builder.Services.AddSingleton<IApiService, ApiService>();
+        // builder.Services.AddSingleton<IApiService, MockApiService>();
 
+        // Leitor de código de barras: seleção da implementação NUM ÚNICO PONTO (este).
+        AddBarcodeScanner(builder);
+    }
 
+    /// <summary>
+    /// Escolhe a implementação de <see cref="IBarcodeScanner"/>. Trocar a linha ativa conforme o alvo:
+    ///   • MockBarcodeScanner        → Windows/emulador (input manual).
+    ///   • DataWedgeBarcodeScanner   → terminais Zebra (Intent broadcast; requer perfil DataWedge).
+    ///   • KeyboardWedgeBarcodeScanner → leitores genéricos teclado+Enter.
+    ///   • ZXingBarcodeScanner       → leitura por câmara.
+    /// </summary>
+    private static void AddBarcodeScanner(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IBarcodeScanner, MockBarcodeScanner>();
+        // builder.Services.AddSingleton<IBarcodeScanner, DataWedgeBarcodeScanner>();
+        // builder.Services.AddSingleton<IBarcodeScanner, KeyboardWedgeBarcodeScanner>();
+        // builder.Services.AddSingleton<IBarcodeScanner, ZXingBarcodeScanner>();
     }
 }
