@@ -1,6 +1,7 @@
 using T2SLogistics;
 using T2SLogistics.Helpers;
 using T2SLogistics.Services.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,51 @@ namespace T2SLogistics.Services.ApiServices
         // Throttle do aviso "em migração": evita spam quando um ecrã faz várias chamadas não migradas.
         private static DateTime _lastMigrationNoticeUtc = DateTime.MinValue;
         private static readonly object _migrationNoticeLock = new object();
+
+        // Guarda p/ não disparar vários redirects concorrentes quando várias chamadas apanham 401 ao mesmo tempo.
+        private static bool _handlingSessionExpiry;
+
+        // 401 numa chamada autenticada = sessão expirada/inválida. NUNCA mascarar como "sem dados" (o operador
+        // pensaria que não há nada a tratar): limpa a sessão e volta ao Login com aviso. Ignora o próprio fluxo
+        // de autenticação (login / definir password), onde o 401 significa "credenciais inválidas".
+        private void HandleSessionExpired(string endpoint)
+        {
+            var route = (endpoint ?? string.Empty).TrimStart('/');
+            if (route.StartsWith("auth", StringComparison.OrdinalIgnoreCase))
+                return;
+            if (_handlingSessionExpiry)
+                return;
+            _handlingSessionExpiry = true;
+
+            // Limpa já a sessão (mantém BaseUrl e idioma) para não reutilizar o token inválido.
+            _settingsService.AuthToken = string.Empty;
+            _settingsService.Username = string.Empty;
+            _settingsService.Email = string.Empty;
+            _settingsService.UserId = string.Empty;
+            _settingsService.UserCode = string.Empty;
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    var page = Application.Current?.MainPage;
+                    if (page != null)
+                        await page.DisplayAlert("Sessão terminada",
+                            "A sua sessão expirou. Inicie sessão novamente.", "OK");
+
+                    var login = App.serviceProvider.GetRequiredService<View.Auth.LoginPage>();
+                    Application.Current.MainPage = new NavigationPage(login);
+                }
+                catch
+                {
+                    // Redirecionamento é best-effort; nunca deve rebentar o fluxo.
+                }
+                finally
+                {
+                    _handlingSessionExpiry = false;
+                }
+            });
+        }
 
         public RequestProvider(ISettingsService settingsService)
         {
@@ -149,6 +195,11 @@ namespace T2SLogistics.Services.ApiServices
                     var response = await httpClient.GetAsync(endpoint);
                     var result = await response.Content.ReadAsStringAsync();
                     AppLog.Write($"GET <- {(int)response.StatusCode} {response.ReasonPhrase} | {result?.Length ?? 0} chars");
+                    if ((int)response.StatusCode == 401)
+                    {
+                        HandleSessionExpired(endpoint);
+                        return default;
+                    }
                     var json = JsonConvert.DeserializeObject<T>(result);
                     return json;
                 }
@@ -211,6 +262,8 @@ namespace T2SLogistics.Services.ApiServices
                     var response = await httpClient.PostAsync(endpoint, new StringContent(jsonobject, Encoding.UTF8, "application/json"));
                     var resultStr = await response.Content.ReadAsStringAsync();
                     AppLog.Write($"POSTSTATUS <- {(int)response.StatusCode} {response.ReasonPhrase} | {resultStr?.Length ?? 0} chars");
+                    if ((int)response.StatusCode == 401)
+                        HandleSessionExpired(endpoint);
                     return new HttpCallResult { StatusCode = (int)response.StatusCode, Body = resultStr ?? string.Empty };
                 }
             }
