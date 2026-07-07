@@ -15,11 +15,11 @@ public sealed class OrderListItemViewModel
     public string ActionText { get; }
     public IAsyncRelayCommand OpenCommand { get; }
 
-    public OrderListItemViewModel(OrderSummary order, string actionText, Func<Task> open)
+    public OrderListItemViewModel(OrderSummary order, OrderParty party, string actionText, Func<Task> open)
     {
-        Number = order.Number;
+        Number = OrderLabels.Title(party, order.Number); // "Enc. Cliente/Fornecedor Nº {obrano}"
         ClientName = order.ClientName;
-        DateText = $"{order.Date:dd/MM/yyyy} · {order.LineCount} linhas";
+        DateText = $"{order.Date:dd/MM/yyyy} · {order.LineCount} {(order.LineCount == 1 ? "linha" : "linhas")}";
         Status = StatusVisuals.Label(order.Status);
         StatusBg = StatusVisuals.Background(order.Status);
         StatusText = StatusVisuals.Text(order.Status);

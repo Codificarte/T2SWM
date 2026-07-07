@@ -42,10 +42,11 @@ public sealed class ApiService : IApiService
 
             return response.Select(r => new OrderSummary
             {
-                Number = r.phcOrderId ?? string.Empty,
+                Number = r.orderNumber.ToString(), // nº da encomenda (obrano) — visível ao operador
+                PhcOrderId = r.phcOrderId ?? string.Empty, // bostamp — chave interna p/ abrir o detalhe
                 ClientName = r.customerName ?? string.Empty, // p/ fornecedores, carrega o nome do Fornecedor
                 Date = r.orderDate ?? default,
-                LineCount = 0, // a lista nova é leve (linhas só no detalhe)
+                LineCount = r.lineCount, // nº de linhas contado pela API na listagem
                 Status = MapStatus(r.status),
                 Party = party,
             }).ToList();
@@ -80,7 +81,8 @@ public sealed class ApiService : IApiService
 
             return new OrderDetail
             {
-                Number = d.phcOrderId ?? string.Empty,
+                Number = d.orderNumber.ToString(), // nº da encomenda (obrano) — visível ao operador
+                PhcOrderId = d.phcOrderId ?? string.Empty, // bostamp — chave interna
                 ClientName = d.customerName ?? string.Empty,
                 Address = string.Empty, // a leitura não fornece morada
                 Date = d.orderDate ?? default,

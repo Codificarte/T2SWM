@@ -15,6 +15,7 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
     private readonly IApiService _api;
     private LogisticsModuleInfo _info = LogisticsModuleInfo.For(LogisticsModule.Orders);
     private OrderParty _party = OrderParty.Clients;
+    private string _key = string.Empty; // bostamp — chave interna p/ chamadas à API (nunca mostrada)
 
     [ObservableProperty] private string _number = string.Empty;
     [ObservableProperty] private string _clientName = string.Empty;
@@ -42,14 +43,15 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         // Encomendas de Fornecedor → Receção; Clientes → Expedição (placeholder neste slice).
         ActionText = _party == OrderParty.Suppliers ? "Iniciar receção" : _info.ActionText;
 
-        var number = query.TryGetValue("number", out var n)
+        // O param "number" da rota é a CHAVE (bostamp) — usada no lookup, não é o nº visível.
+        var key = query.TryGetValue("number", out var n)
             ? Uri.UnescapeDataString(n?.ToString() ?? string.Empty)
             : string.Empty;
 
-        await LoadAsync(number);
+        await LoadAsync(key);
     }
 
-    private async Task LoadAsync(string number)
+    private async Task LoadAsync(string key)
     {
         if (IsBusy)
             return;
@@ -58,12 +60,14 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         {
             IsBusy = true;
 
-            var detail = await _api.GetOrderAsync(_info.Module, number);
+            var detail = await _api.GetOrderAsync(_info.Module, key);
             if (detail is null)
                 return;
 
-            Title = detail.Number;
-            Number = detail.Number;
+            _key = string.IsNullOrEmpty(detail.PhcOrderId) ? key : detail.PhcOrderId;
+            var label = OrderLabels.Title(_party, detail.Number); // "Enc. Cliente/Fornecedor Nº {obrano}"
+            Title = label;
+            Number = label;
             ClientName = detail.ClientName;
             Address = detail.Address;
             DateText = detail.Date.ToString("dd/MM/yyyy");
@@ -106,15 +110,16 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         try
         {
             IsBusy = true;
-            var started = await _api.StartReceptionAsync(Number);
+            var started = await _api.StartReceptionAsync(_key);
             if (started is null)
             {
                 await Shell.Current.DisplayAlert("Receção", "Não foi possível iniciar a receção desta encomenda.", "OK");
                 return;
             }
 
+            // A rota leva a CHAVE (bostamp) — o ecrã de leitura recarrega as linhas por ela e mostra o obrano do detalhe.
             await Shell.Current.GoToAsync(
-                $"{Routes.ReceptionReading}?receptionId={Uri.EscapeDataString(started.ReceptionId)}&number={Uri.EscapeDataString(Number)}");
+                $"{Routes.ReceptionReading}?receptionId={Uri.EscapeDataString(started.ReceptionId)}&number={Uri.EscapeDataString(_key)}");
         }
         finally
         {

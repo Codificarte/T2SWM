@@ -61,14 +61,20 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
 
     private async Task LoadAsync()
     {
-        if (IsBusy)
-            return;
+        // Snapshot do separador ANTES do await: os dados e os rótulos ("Enc. Cliente/Fornecedor") têm de
+        // corresponder ao mesmo tipo. Não usamos IsBusy como bloqueio de reentrância — se o operador troca
+        // de separador durante o pedido, deixamos o novo load correr e descartamos o resultado obsoleto.
+        var party = Party;
 
         try
         {
             IsBusy = true;
 
-            var data = await _api.GetOrdersAsync(_info.Module, Party);
+            var data = await _api.GetOrdersAsync(_info.Module, party);
+
+            // Trocou de separador durante o pedido → resultado obsoleto; o load do separador atual renderiza.
+            if (party != Party)
+                return;
 
             var term = Query?.Trim();
             if (!string.IsNullOrEmpty(term))
@@ -81,11 +87,11 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
             Orders.Clear();
             foreach (var order in data)
             {
-                var number = order.Number;
-                var party = Party;
-                Orders.Add(new OrderListItemViewModel(order, "Abrir",
+                // A rota leva sempre a CHAVE (bostamp) — o detalhe faz o lookup por ela; o nº visível (obrano) fica no cartão.
+                var key = order.PhcOrderId;
+                Orders.Add(new OrderListItemViewModel(order, party, "Abrir",
                     () => Shell.Current.GoToAsync(
-                        $"{Routes.MovementDetail}?module={_info.Module}&party={party}&number={Uri.EscapeDataString(number)}")));
+                        $"{Routes.MovementDetail}?module={_info.Module}&party={party}&number={Uri.EscapeDataString(key)}")));
             }
         }
         finally

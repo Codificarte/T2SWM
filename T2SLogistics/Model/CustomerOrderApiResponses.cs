@@ -10,6 +10,8 @@ namespace T2SLogistics.Model
     public class CustomerOrderSummaryResponse
     {
         public string? phcOrderId { get; set; }
+        public int orderNumber { get; set; }
+        public int lineCount { get; set; }
         public string? customerId { get; set; }
         public string? customerName { get; set; }
         public DateTime? orderDate { get; set; }
@@ -29,6 +31,7 @@ namespace T2SLogistics.Model
     public class CustomerOrderDetailResponse
     {
         public string? phcOrderId { get; set; }
+        public int orderNumber { get; set; }
         public string? customerId { get; set; }
         public string? customerName { get; set; }
         public DateTime? orderDate { get; set; }

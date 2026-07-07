@@ -18,7 +18,7 @@ public partial class ReceptionReadingViewModel : ViewModelBase, IQueryAttributab
     private readonly IBarcodeScanner _scanner;
 
     private string _receptionId = string.Empty;
-    private string _number = string.Empty;
+    private string _key = string.Empty; // bostamp — chave interna p/ recarregar as linhas (nunca mostrada)
 
     [ObservableProperty] private string _barcode = string.Empty;
     [ObservableProperty] private int _quantity = 1;
@@ -50,11 +50,12 @@ public partial class ReceptionReadingViewModel : ViewModelBase, IQueryAttributab
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         _receptionId = query.TryGetValue("receptionId", out var r) ? r?.ToString() ?? string.Empty : string.Empty;
-        _number = query.TryGetValue("number", out var n)
+        // O param "number" da rota é a CHAVE (bostamp) — usada no lookup; o nº visível (obrano) vem do detalhe.
+        _key = query.TryGetValue("number", out var n)
             ? Uri.UnescapeDataString(n?.ToString() ?? string.Empty)
             : string.Empty;
 
-        Title = $"Receção {_number}";
+        Title = "Receção";
         await LoadAsync();
     }
 
@@ -65,10 +66,11 @@ public partial class ReceptionReadingViewModel : ViewModelBase, IQueryAttributab
         try
         {
             IsBusy = true;
-            var detail = await _api.GetOrderAsync(LogisticsModule.Orders, _number);
+            var detail = await _api.GetOrderAsync(LogisticsModule.Orders, _key);
             Lines.Clear();
             if (detail is null)
                 return;
+            Title = $"Receção {detail.Number}"; // nº da encomenda (obrano), obtido do detalhe carregado
             foreach (var line in detail.Lines)
                 Lines.Add(new ReceptionLineViewModel(new ReceptionExpectedLine
                 {
