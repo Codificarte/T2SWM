@@ -100,5 +100,45 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <!--  Indicador de carregamento — cobre a lista no arranque e ao trocar de separador  -->
+        <Grid Grid.Row="2"
+              IsVisible="{Binding IsBusy}"
+              BackgroundColor="{StaticResource PageBg}">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="10">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="{StaticResource BrandRed}"
+                                   WidthRequest="36" HeightRequest="36" />
+                <Label Text="A carregar encomendas…"
+                       FontSize="13"
+                       TextColor="{StaticResource TextMuted}"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!--  Estado vazio / falha de ligação — dá feedback em vez de lista em branco  -->
+        <Grid Grid.Row="2"
+              IsVisible="{Binding ShowEmpty}"
+              BackgroundColor="{StaticResource PageBg}">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="10" Padding="24,0">
+                <Label Text="Sem encomendas a mostrar."
+                       FontSize="15" FontAttributes="Bold"
+                       TextColor="{StaticResource TextPrimary}"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Se esperava ver dados, verifique a ligação ao servidor e toque em Atualizar."
+                       FontSize="12"
+                       TextColor="{StaticResource TextMuted}"
+                       HorizontalTextAlignment="Center" />
+                <Button Text="Atualizar"
+                        FontSize="14" HeightRequest="44" CornerRadius="10"
+                        Margin="0,6,0,0" Padding="24,0"
+                        BackgroundColor="{StaticResource BrandRed}" TextColor="White"
+                        Command="{Binding RefreshCommand}" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

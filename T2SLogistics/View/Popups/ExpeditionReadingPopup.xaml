@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopup:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mopup="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+                 xmlns:ctrls="clr-namespace:T2SLogistics.Controls"
+                 x:Class="T2SLogistics.View.Popups.ExpeditionReadingPopup"
+                 x:DataType="vm:ExpeditionReadingPopupViewModel"
+                 NavigationPage.HasNavigationBar="False">
+
+    <Grid>
+        <!--  Fundo esbatido: mostra o detalhe por trás; tocar fora cancela  -->
+        <Grid BackgroundColor="{StaticResource Gray500}" Opacity="0.6" VerticalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackdropTapped" />
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <!--  Cartão no topo (do meio para cima) — sem teclado virtual, não precisa de ficar no fundo  -->
+        <Border BackgroundColor="{StaticResource CardBg}"
+                VerticalOptions="Start"
+                Margin="14,44,14,0"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 16">
+            <VerticalStackLayout Padding="18,16,18,18" Spacing="12">
+
+                <!--  Cabeçalho: artigo + previsto  -->
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="{Binding Description}"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="{Binding ExpectedText}"
+                           FontSize="12"
+                           TextColor="{StaticResource TextMuted}" />
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="1" Color="{StaticResource Divider}" />
+
+                <!--  Passo 1: código do produto (scanner — sem teclado)  -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Código do produto (EAN ou QR)" FontSize="10" TextColor="{StaticResource TextHint}" />
+                    <ctrls:ScanEntry x:Name="ProductEntry"
+                                     Text="{Binding Barcode}"
+                                     Placeholder="Ler o código"
+                                     FontSize="15"
+                                     ReturnType="Go"
+                                     TextChanged="OnProductTextChanged"
+                                     Completed="OnProductCompleted" />
+                </VerticalStackLayout>
+
+                <!--  Passo 2: expandido após validar o produto  -->
+                <VerticalStackLayout Spacing="12" IsVisible="{Binding Expanded}">
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Lote" FontSize="10" TextColor="{StaticResource TextHint}" />
+                            <ctrls:ScanEntry Text="{Binding Lote}"
+                                             IsEnabled="{Binding LoteEditable}"
+                                             Placeholder="Lote"
+                                             FontSize="15" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Validade (lida)" FontSize="10" TextColor="{StaticResource TextHint}" />
+                            <Label Text="{Binding ExpiryText}" FontSize="15"
+                                   TextColor="{StaticResource TextMuted}" VerticalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding RequiresAlveolo}">
+                        <Label Text="Alvéolo (ler QR)" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <ctrls:ScanEntry Text="{Binding Alveolo}" Placeholder="Ler a localização" FontSize="15" />
+                    </VerticalStackLayout>
+
+                    <!--  Quantidade por −/＋ (sem teclado)  -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Quantidade" FontSize="10" TextColor="{StaticResource TextHint}" />
+                        <Grid ColumnDefinitions="52,*,52" ColumnSpacing="10">
+                            <Button Grid.Column="0" Text="−" FontSize="22" FontAttributes="Bold"
+                                    HeightRequest="46" CornerRadius="10"
+                                    BackgroundColor="{StaticResource CardBg}"
+                                    BorderColor="{StaticResource Border}" BorderWidth="1"
+                                    TextColor="{StaticResource TextPrimary}"
+                                    Command="{Binding DecrementQuantityCommand}" />
+                            <Label Grid.Column="1" Text="{Binding Quantity}"
+                                   FontSize="20" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            <Button Grid.Column="2" Text="+" FontSize="22" FontAttributes="Bold"
+                                    HeightRequest="46" CornerRadius="10"
+                                    BackgroundColor="{StaticResource CardBg}"
+                                    BorderColor="{StaticResource Border}" BorderWidth="1"
+                                    TextColor="{StaticResource TextPrimary}"
+                                    Command="{Binding IncrementQuantityCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!--  Estado (validação/erro)  -->
+                <Label Text="{Binding StatusMessage}"
+                       TextColor="{Binding StatusColor}"
+                       FontSize="13"
+                       IsVisible="{Binding HasStatus}" />
+
+                <!--  Ações  -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                    <Button Grid.Column="0"
+                            Text="Cancelar"
+                            FontSize="14"
+                            HeightRequest="46"
+                            CornerRadius="10"
+                            BackgroundColor="{StaticResource CardBg}"
+                            BorderColor="{StaticResource Border}"
+                            BorderWidth="1"
+                            TextColor="{StaticResource TextMuted}"
+                            Command="{Binding CancelCommand}" />
+                    <Button Grid.Column="1"
+                            Text="Confirmar"
+                            FontSize="14"
+                            HeightRequest="46"
+                            CornerRadius="10"
+                            BackgroundColor="{StaticResource BrandRed}"
+                            TextColor="White"
+                            IsEnabled="{Binding Expanded}"
+                            Command="{Binding ConfirmCommand}" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</mopup:PopupPage>

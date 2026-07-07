@@ -21,6 +21,9 @@ namespace T2SLogistics.Platforms.Android
                 {
                     editText.Background = null; // Remove underline
                     editText.SetPadding(0, 0, 0, 0); // Optional
+                    // Expedição: ScanEntry não abre o teclado virtual (input por scanner/keyboard-wedge);
+                    // qualquer outro Entry mantém o comportamento normal.
+                    editText.ShowSoftInputOnFocus = view is not T2SLogistics.Controls.ScanEntry;
                 }
             }
         };

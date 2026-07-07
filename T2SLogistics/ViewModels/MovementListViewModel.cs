@@ -25,6 +25,9 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
     [ObservableProperty]
     private string _query = string.Empty;
 
+    // Estado vazio: distingue "carregou e não há nada / falhou" de "a carregar". Dá feedback + Atualizar.
+    [ObservableProperty] private bool _showEmpty;
+
     public ObservableCollection<OrderListItemViewModel> Orders { get; } = new();
 
     public Color ClientsBg => Res.Color(Party == OrderParty.Clients ? "BrandRed" : "CardBg");
@@ -69,6 +72,7 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
         try
         {
             IsBusy = true;
+            ShowEmpty = false;
 
             var data = await _api.GetOrdersAsync(_info.Module, party);
 
@@ -93,10 +97,16 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
                     () => Shell.Current.GoToAsync(
                         $"{Routes.MovementDetail}?module={_info.Module}&party={party}&number={Uri.EscapeDataString(key)}")));
             }
+
+            ShowEmpty = Orders.Count == 0;
         }
         finally
         {
             IsBusy = false;
         }
     }
+
+    /// <summary>Voltar a carregar (botão do estado vazio / falha de ligação).</summary>
+    [RelayCommand]
+    private Task Refresh() => LoadAsync();
 }

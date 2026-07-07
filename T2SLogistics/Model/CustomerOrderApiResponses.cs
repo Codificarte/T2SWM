@@ -26,6 +26,10 @@ namespace T2SLogistics.Model
         public string? productDescription { get; set; }
         public string? eanCode { get; set; }
         public int quantity { get; set; }
+        // Expedição: o que tem de sair nesta linha (correspondência estrita na leitura). expiry é informativa.
+        public string? lote { get; set; }
+        public DateTime? expiry { get; set; }
+        public string? binLocation { get; set; }
     }
 
     public class CustomerOrderDetailResponse

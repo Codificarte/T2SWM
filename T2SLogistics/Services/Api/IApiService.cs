@@ -39,6 +39,34 @@ public interface IApiService
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Inicia uma Separação a partir de uma Encomenda de Cliente (POST api/separations). Devolve a
+    /// Separação (id) ou <c>null</c> se a encomenda não existe/é inelegível ou a chamada falha. Início
+    /// idempotente no servidor: repetir devolve a Separação em curso.
+    /// </summary>
+    Task<StartedSeparation?> StartSeparationAsync(
+        string phcOrderId,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Regista uma leitura de separação contra uma Separação em curso (POST api/separations/{id}/readings).
+    /// As regras estritas (lote==encomenda, alvéolo==linha, quantidade não excede o pedido) são validadas no
+    /// servidor; em recusa o resultado traz a mensagem pronta para mostrar ao operador.
+    /// </summary>
+    Task<SeparationReadingResult> RecordSeparationReadingAsync(
+        string separationId,
+        SeparationReadingInput input,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Resolve um código de barras para a referência do Artigo no PHC (GET articles/by-barcode/{barcode}/
+    /// capabilities). Usado na Expedição para validar que o código lido pertence à referência da linha.
+    /// Devolve a referência resolvida, ou <c>null</c> se o código não existe / não foi possível resolver.
+    /// </summary>
+    Task<string?> ResolveArticleRefByBarcodeAsync(
+        string barcode,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Interpreta uma Leitura (código de barras / QR GS1) na API (POST api/scans/parse) — FR-10. A App
     /// envia o payload cru e nunca interpreta GS1 localmente. Em sucesso devolve a identificação do Artigo
     /// + Lote/Validade/Nº Série conforme presentes; em conteúdo malformado/erro, traz a mensagem tratada.

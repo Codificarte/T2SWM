@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
              x:Class="T2SLogistics.Views.MovementDetailPage"
+             x:Name="Page"
              x:DataType="vm:MovementDetailViewModel"
              Title="{Binding Number}"
              BackgroundColor="{StaticResource PageBg}">
@@ -72,6 +73,10 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="9" />
                                 </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenLineCommand}"
+                                                          CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
                                 <Grid Padding="10,8" ColumnDefinitions="*,Auto">
                                     <VerticalStackLayout Grid.Column="0">
                                         <Label Text="{Binding Description}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
@@ -90,8 +95,26 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!--  Ação principal: iniciar o processo (texto muda conforme o módulo)  -->
+        <!--  Indicador de carregamento — cobre o conteúdo enquanto o detalhe é obtido  -->
+        <Grid Grid.Row="0"
+              IsVisible="{Binding IsBusy}"
+              BackgroundColor="{StaticResource PageBg}">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="10">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="{StaticResource BrandRed}"
+                                   WidthRequest="36" HeightRequest="36" />
+                <Label Text="A carregar a encomenda…"
+                       FontSize="13"
+                       TextColor="{StaticResource TextMuted}"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!--  Ação principal: só na Receção (Fornecedores). A Expedição regista por TAP na linha.  -->
         <Border Grid.Row="1"
+                IsVisible="{Binding ShowStartButton}"
                 BackgroundColor="{StaticResource CardBg}"
                 Stroke="{StaticResource Divider}"
                 StrokeThickness="1"

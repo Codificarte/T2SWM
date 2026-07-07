@@ -94,6 +94,9 @@ public sealed class ApiService : IApiService
                     ProductRef = i.productRef ?? string.Empty,
                     Picked = 0, // estado de separação ainda não vem da leitura
                     Total = i.quantity,
+                    Lote = i.lote,
+                    Expiry = i.expiry,
+                    BinLocation = i.binLocation,
                 }).ToList(),
             };
         }
@@ -184,6 +187,127 @@ public sealed class ApiService : IApiService
         {
             AppLog.Error(nameof(RecordReceptionReadingAsync), ex);
             return new ReceptionReadingResult { Success = false, Message = "Erro de comunicação com o servidor." };
+        }
+    }
+
+    public async Task<StartedSeparation?> StartSeparationAsync(
+        string phcOrderId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(phcOrderId))
+            return null;
+
+        try
+        {
+            var body = JsonConvert.SerializeObject(new { phcOrderId });
+            var res = await _requestProvider.PostWithStatus(ApiBase.SeparationsKey, body);
+            if (!res.IsSuccess)
+            {
+                AppLog.Write($"StartSeparationAsync <- {res.StatusCode} (sem separação)");
+                return null;
+            }
+
+            var dto = JsonConvert.DeserializeObject<SeparationApiResponse>(res.Body);
+            if (dto is null || string.IsNullOrWhiteSpace(dto.separationId))
+                return null;
+
+            return new StartedSeparation
+            {
+                SeparationId = dto.separationId!,
+                PhcOrderId = dto.phcOrderId ?? phcOrderId,
+                Status = dto.status ?? string.Empty,
+            };
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(StartSeparationAsync), ex);
+            return null;
+        }
+    }
+
+    public async Task<SeparationReadingResult> RecordSeparationReadingAsync(
+        string separationId, SeparationReadingInput input, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(separationId) || input is null || string.IsNullOrWhiteSpace(input.Barcode) || input.Quantity <= 0)
+            return new SeparationReadingResult { Success = false, Message = "Código e quantidade (> 0) são obrigatórios." };
+
+        try
+        {
+            var endpoint = string.Format(ApiBase.SeparationReadingsKey, Uri.EscapeDataString(separationId));
+            var body = JsonConvert.SerializeObject(new
+            {
+                barcode = input.Barcode,
+                quantity = input.Quantity,
+                lote = input.Lote,
+                alveolo = input.Alveolo,
+                observation = input.Observation,
+            });
+
+            var res = await _requestProvider.PostWithStatus(endpoint, body);
+
+            if (res.IsSuccess)
+            {
+                var item = JsonConvert.DeserializeObject<SeparationItemApiResponse>(res.Body);
+                return new SeparationReadingResult
+                {
+                    Success = true,
+                    ProductRef = item?.productRef ?? string.Empty,
+                    Lote = item?.lote,
+                    SeparatedQuantity = item?.separatedQuantity ?? input.Quantity,
+                    RequiredQuantity = item?.requiredQuantity ?? 0,
+                    LineStatus = item?.status ?? string.Empty,
+                };
+            }
+
+            return new SeparationReadingResult { Success = false, Message = ExtractSeparationMessage(res) };
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(RecordSeparationReadingAsync), ex);
+            return new SeparationReadingResult { Success = false, Message = "Erro de comunicação com o servidor." };
+        }
+    }
+
+    // Traduz uma resposta não-2xx de uma leitura de separação numa mensagem para o operador.
+    private static string ExtractSeparationMessage(HttpCallResult res)
+    {
+        if (res.IsBlocked)
+            return "Funcionalidade em migração.";
+        if (res.StatusCode == 401)
+            return "Sessão expirada. Inicie sessão novamente.";
+        if (res.StatusCode == 404)
+            return "Separação não encontrada.";
+
+        if (!string.IsNullOrWhiteSpace(res.Body))
+        {
+            try
+            {
+                var msg = JsonConvert.DeserializeObject<ApiMessageResponse>(res.Body)?.message;
+                if (!string.IsNullOrWhiteSpace(msg))
+                    return msg!;
+            }
+            catch { /* corpo não-JSON: cai no genérico */ }
+        }
+
+        return "Não foi possível registar a leitura.";
+    }
+
+    public async Task<string?> ResolveArticleRefByBarcodeAsync(
+        string barcode, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(barcode))
+            return null;
+
+        try
+        {
+            var endpoint = string.Format(ApiBase.ArticleByBarcodeKey, Uri.EscapeDataString(barcode.Trim()));
+            var dto = await _requestProvider.Get<ArticleByBarcodeApiResponse>(endpoint);
+            var reference = dto?.articleRef;
+            return string.IsNullOrWhiteSpace(reference) ? null : reference!.Trim();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(ResolveArticleRefByBarcodeAsync), ex);
+            return null;
         }
     }
 

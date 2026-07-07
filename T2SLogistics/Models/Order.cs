@@ -56,4 +56,8 @@ public sealed class OrderLine
     public string ProductRef { get; init; } = string.Empty; // ref do PHC (casa a leitura com a linha esperada)
     public int Picked { get; init; }
     public int Total { get; init; }
+    // Expedição: o que tem de sair nesta linha (bi.lote / se.validade / bi2.identificacao). Validade só informativa.
+    public string? Lote { get; init; }
+    public DateTime? Expiry { get; init; }
+    public string? BinLocation { get; init; }
 }

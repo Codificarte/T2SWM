@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using T2SLogistics.Models;
 using T2SLogistics.Services.Api;
+using T2SLogistics.View.Popups;
 
 namespace T2SLogistics.ViewModels;
 
@@ -16,6 +18,10 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
     private LogisticsModuleInfo _info = LogisticsModuleInfo.For(LogisticsModule.Orders);
     private OrderParty _party = OrderParty.Clients;
     private string _key = string.Empty; // bostamp — chave interna p/ chamadas à API (nunca mostrada)
+    private string _separationId = string.Empty; // criado no 1.º registo (lazy), reutilizado depois
+
+    // Botão de arranque ao fundo: só na Receção (Fornecedores). Na Expedição regista-se por TAP na linha.
+    [ObservableProperty] private bool _showStartButton;
 
     [ObservableProperty] private string _number = string.Empty;
     [ObservableProperty] private string _clientName = string.Empty;
@@ -40,8 +46,9 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
             Enum.TryParse<OrderParty>(p?.ToString(), ignoreCase: true, out var party))
             _party = party;
 
-        // Encomendas de Fornecedor → Receção; Clientes → Expedição (placeholder neste slice).
-        ActionText = _party == OrderParty.Suppliers ? "Iniciar receção" : _info.ActionText;
+        // Encomendas de Fornecedor → Receção (botão de arranque); Clientes → Expedição (TAP na linha → modal).
+        ActionText = "Iniciar receção";
+        ShowStartButton = _party == OrderParty.Suppliers;
 
         // O param "number" da rota é a CHAVE (bostamp) — usada no lookup, não é o nº visível.
         var key = query.TryGetValue("number", out var n)
@@ -86,21 +93,54 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         }
     }
 
+    // Só a Receção (Fornecedores) usa o botão de arranque; a Expedição faz-se por TAP na linha.
     [RelayCommand]
-    private async Task Start()
-    {
-        // Fornecedores: iniciar a Receção na API e ir para a conferência por leitura.
-        if (_party == OrderParty.Suppliers)
-        {
-            await StartReceptionAsync();
-            return;
-        }
+    private Task Start() => _party == OrderParty.Suppliers ? StartReceptionAsync() : Task.CompletedTask;
 
-        // Clientes (Expedição): ainda não ligado neste slice.
-        await Shell.Current.DisplayAlert(
-            _info.Title,
-            $"{_info.ActionText} — {Number}\n(O ecrã de separação será o passo seguinte.)",
-            "OK");
+    /// <summary>
+    /// Toca numa linha (Expedição): abre o modal de leitura. Se confirmado, cria a separação no 1.º
+    /// registo (idempotente no servidor), submete a leitura e atualiza o progresso da linha.
+    /// </summary>
+    [RelayCommand]
+    private async Task OpenLine(OrderLineViewModel? line)
+    {
+        if (line is null || _party != OrderParty.Clients)
+            return;
+
+        var popup = new ExpeditionReadingPopup(line);
+        await MopupService.Instance.PushAsync(popup);
+        var input = await popup.Result;
+        if (input is null)
+            return;
+
+        try
+        {
+            IsBusy = true;
+
+            if (string.IsNullOrEmpty(_separationId))
+            {
+                var started = await _api.StartSeparationAsync(_key);
+                if (started is null)
+                {
+                    await Shell.Current.DisplayAlert("Expedição", "Não foi possível iniciar a separação desta encomenda.", "OK");
+                    return;
+                }
+                _separationId = started.SeparationId;
+            }
+
+            var result = await _api.RecordSeparationReadingAsync(_separationId, input);
+            if (!result.Success)
+            {
+                await Shell.Current.DisplayAlert("Leitura recusada", result.Message ?? "Não foi possível registar a leitura.", "OK");
+                return;
+            }
+
+            line.Separated = result.SeparatedQuantity;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async Task StartReceptionAsync()

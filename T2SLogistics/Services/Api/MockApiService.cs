@@ -73,6 +73,41 @@ public sealed class MockApiService : IApiService
         return Task.FromResult(result);
     }
 
+    public Task<StartedSeparation?> StartSeparationAsync(
+        string phcOrderId, CancellationToken cancellationToken = default)
+    {
+        StartedSeparation? started = new StartedSeparation
+        {
+            SeparationId = Guid.NewGuid().ToString(),
+            PhcOrderId = phcOrderId,
+            Status = "em separação",
+        };
+        return Task.FromResult(started);
+    }
+
+    public Task<SeparationReadingResult> RecordSeparationReadingAsync(
+        string separationId, SeparationReadingInput input, CancellationToken cancellationToken = default)
+    {
+        // Demonstração: aceita sempre a leitura como completa.
+        var result = new SeparationReadingResult
+        {
+            Success = true,
+            ProductRef = input.Barcode,
+            Lote = input.Lote,
+            SeparatedQuantity = input.Quantity,
+            RequiredQuantity = input.Quantity,
+            LineStatus = "completo",
+        };
+        return Task.FromResult(result);
+    }
+
+    public Task<string?> ResolveArticleRefByBarcodeAsync(
+        string barcode, CancellationToken cancellationToken = default)
+    {
+        // Demonstração: assume que o código resolve para si próprio (sem PHC real).
+        return Task.FromResult<string?>(string.IsNullOrWhiteSpace(barcode) ? null : barcode.Trim());
+    }
+
     public Task<ParsedScanResult?> ParseScanAsync(
         string payload, CancellationToken cancellationToken = default)
     {
