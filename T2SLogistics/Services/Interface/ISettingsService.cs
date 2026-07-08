@@ -15,6 +15,7 @@ namespace T2SLogistics.Services.Interface
         string BaseUrl { get; set; }
         string UserCode { get; set; }
         string Applanguage { get; set; }
+        bool RememberMe { get; set; }
 
     }
 }

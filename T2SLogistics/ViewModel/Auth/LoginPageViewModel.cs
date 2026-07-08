@@ -33,6 +33,8 @@ namespace T2SLogistics.ViewModel.Auth
             Day = DateTime.Now.DayOfWeek.ToString();
             Date = DateTime.Now.ToString("dd MMMM yyyy");
             AppVersion = AppInfo.VersionString;
+            // Pré-marca a caixa com a última escolha do operador.
+            RememberMe = _settingsService.RememberMe;
 #if DEBUG
      
 
@@ -168,7 +170,11 @@ namespace T2SLogistics.ViewModel.Auth
                             await _navigationService.NavigateToPage<ResetNewPasswordPage>(Email);
                             return;
                         }
+                        // O token tem de ser sempre gravado (o RequestProvider lê-o do SettingsService a
+                        // cada chamada). O "Lembrar-me" controla é a persistência ENTRE sessões: o arranque
+                        // (App.SetMainPage) só mantém a sessão se RememberMe estiver ligado.
                         _settingsService.AuthToken = authResponse.token;
+                        _settingsService.RememberMe = RememberMe;
                         _settingsService.Username = Email;
                         _settingsService.Email = Email;
                         // UI nova: após login entra no Shell (menu principal), não na HomePage antiga.

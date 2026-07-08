@@ -17,6 +17,7 @@ namespace T2SLogistics.Services.SettingsService
         public const string UserIdKey = "UserIdKey";
 
         public const string UserCodeKey = "UserCodeKey";
+        public const string RememberMeKey = "RememberMeKey";
         public string Applanguage
         {
             get => Preferences.Default.Get(ApplanguageKey, string.Empty);
@@ -51,6 +52,11 @@ namespace T2SLogistics.Services.SettingsService
         {
             get => Preferences.Default.Get(UserIdKey, string.Empty);
             set => AddOrUpdateValue(UserIdKey, value);
+        }
+        public bool RememberMe
+        {
+            get => Preferences.Default.Get(RememberMeKey, false);
+            set => Preferences.Default.Set(RememberMeKey, value);
         }
 
         public Task AddOrUpdateValue(string key, string value) => AddOrUpdateValueInternal(key, value);

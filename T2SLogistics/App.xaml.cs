@@ -41,6 +41,11 @@ namespace T2SLogistics
         {
             // Porta de entrada por autenticação: sem token → Login; com token → Shell (menu da UI nova).
             // O Login (auth/login, já migrado) guarda o JWT e encaminha para o AppShell ao concluir.
+            // "Lembrar-me": se a sessão anterior não pediu para ser lembrada, o token não vale para
+            // arranque — limpa-se e volta-se ao Login (o token só serve dentro da própria sessão).
+            if (!settingsService.RememberMe && !string.IsNullOrEmpty(settingsService.AuthToken))
+                settingsService.AuthToken = string.Empty;
+
             if (string.IsNullOrEmpty(settingsService.AuthToken))
                 MainPage = new NavigationPage(serviceProvider.GetService<View.Auth.LoginPage>());
             else
