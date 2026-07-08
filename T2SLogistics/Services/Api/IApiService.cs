@@ -20,12 +20,13 @@ public interface IApiService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Inicia uma Receção a partir de uma Encomenda de Fornecedor (POST api/receptions). Devolve a Receção
-    /// (id + itens esperados) ou <c>null</c> se a encomenda não existe/é inelegível ou a chamada falha.
-    /// Início idempotente no servidor: repetir devolve a Receção em curso.
+    /// Inicia uma Receção a partir de uma Encomenda de Fornecedor (POST api/receptions). O <paramref name="pin"/>
+    /// identifica o operador que faz as leituras (PDA partilhado). Devolve a Receção (id + itens esperados) ou
+    /// <c>null</c> se a encomenda não existe/é inelegível, o PIN é inválido, ou a chamada falha. Início
+    /// idempotente no servidor: repetir devolve a Receção em curso.
     /// </summary>
     Task<StartedReception?> StartReceptionAsync(
-        string phcOrderId,
+        string phcOrderId, string pin,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -39,12 +40,12 @@ public interface IApiService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Inicia uma Separação a partir de uma Encomenda de Cliente (POST api/separations). Devolve a
-    /// Separação (id) ou <c>null</c> se a encomenda não existe/é inelegível ou a chamada falha. Início
-    /// idempotente no servidor: repetir devolve a Separação em curso.
+    /// Inicia uma Separação a partir de uma Encomenda de Cliente (POST api/separations). O <paramref name="pin"/>
+    /// identifica o operador que faz as leituras (PDA partilhado). Devolve a Separação (id) ou <c>null</c> se a
+    /// encomenda não existe/é inelegível, o PIN é inválido, ou a chamada falha. Início idempotente no servidor.
     /// </summary>
     Task<StartedSeparation?> StartSeparationAsync(
-        string phcOrderId,
+        string phcOrderId, string pin,
         CancellationToken cancellationToken = default);
 
     /// <summary>

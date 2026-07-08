@@ -211,14 +211,14 @@ public sealed class ApiService : IApiService
     }
 
     public async Task<StartedReception?> StartReceptionAsync(
-        string phcOrderId, CancellationToken cancellationToken = default)
+        string phcOrderId, string pin, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(phcOrderId))
             return null;
 
         try
         {
-            var body = JsonConvert.SerializeObject(new { phcOrderId });
+            var body = JsonConvert.SerializeObject(new { phcOrderId, pin });
             var res = await _requestProvider.PostWithStatus(ApiBase.ReceptionsKey, body);
             if (!res.IsSuccess)
             {
@@ -294,14 +294,14 @@ public sealed class ApiService : IApiService
     }
 
     public async Task<StartedSeparation?> StartSeparationAsync(
-        string phcOrderId, CancellationToken cancellationToken = default)
+        string phcOrderId, string pin, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(phcOrderId))
             return null;
 
         try
         {
-            var body = JsonConvert.SerializeObject(new { phcOrderId });
+            var body = JsonConvert.SerializeObject(new { phcOrderId, pin });
             var res = await _requestProvider.PostWithStatus(ApiBase.SeparationsKey, body);
             if (!res.IsSuccess)
             {

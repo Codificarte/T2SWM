@@ -59,7 +59,7 @@ public sealed class MockApiService : IApiService
     }
 
     public Task<StartedReception?> StartReceptionAsync(
-        string phcOrderId, CancellationToken cancellationToken = default)
+        string phcOrderId, string pin, CancellationToken cancellationToken = default)
     {
         var order = BuildOrders(LogisticsModule.Orders, OrderParty.Suppliers).FirstOrDefault(o => o.Number == phcOrderId)
                     ?? BuildOrders(LogisticsModule.Orders, OrderParty.Suppliers).First();
@@ -96,7 +96,7 @@ public sealed class MockApiService : IApiService
     }
 
     public Task<StartedSeparation?> StartSeparationAsync(
-        string phcOrderId, CancellationToken cancellationToken = default)
+        string phcOrderId, string pin, CancellationToken cancellationToken = default)
     {
         StartedSeparation? started = new StartedSeparation
         {

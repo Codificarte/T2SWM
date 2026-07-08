@@ -107,6 +107,23 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         if (line is null || _party != OrderParty.Clients)
             return;
 
+        // 1.ª leitura desta encomenda: pedir o PIN (identifica quem separa) e iniciar a separação atribuída
+        // a esse operador. Nas leituras seguintes (separação já iniciada) não se repete o PIN.
+        if (string.IsNullOrEmpty(_separationId))
+        {
+            var pin = await AskPinAsync();
+            if (string.IsNullOrEmpty(pin))
+                return; // cancelado
+
+            var started = await _api.StartSeparationAsync(_key, pin);
+            if (started is null)
+            {
+                await Shell.Current.DisplayAlert("Expedição", "Não foi possível iniciar a separação (verifique o PIN e a encomenda).", "OK");
+                return;
+            }
+            _separationId = started.SeparationId;
+        }
+
         var popup = new ExpeditionReadingPopup(line);
         await MopupService.Instance.PushAsync(popup);
         var input = await popup.Result;
@@ -116,17 +133,6 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         try
         {
             IsBusy = true;
-
-            if (string.IsNullOrEmpty(_separationId))
-            {
-                var started = await _api.StartSeparationAsync(_key);
-                if (started is null)
-                {
-                    await Shell.Current.DisplayAlert("Expedição", "Não foi possível iniciar a separação desta encomenda.", "OK");
-                    return;
-                }
-                _separationId = started.SeparationId;
-            }
 
             var result = await _api.RecordSeparationReadingAsync(_separationId, input);
             if (!result.Success)
@@ -147,13 +153,19 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
     {
         if (IsBusy)
             return;
+
+        // PDA partilhado: pedir o PIN — identifica quem faz as leituras (a receção fica-lhe atribuída).
+        var pin = await AskPinAsync();
+        if (string.IsNullOrEmpty(pin))
+            return; // cancelado
+
         try
         {
             IsBusy = true;
-            var started = await _api.StartReceptionAsync(_key);
+            var started = await _api.StartReceptionAsync(_key, pin);
             if (started is null)
             {
-                await Shell.Current.DisplayAlert("Receção", "Não foi possível iniciar a receção desta encomenda.", "OK");
+                await Shell.Current.DisplayAlert("Receção", "Não foi possível iniciar a receção (verifique o PIN e a encomenda).", "OK");
                 return;
             }
 
@@ -165,5 +177,13 @@ public partial class MovementDetailViewModel : ViewModelBase, IQueryAttributable
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Pede o PIN do operador num popup. Devolve o PIN, ou <c>null</c> se cancelado.</summary>
+    private static async Task<string?> AskPinAsync()
+    {
+        var popup = new PinPromptPopup();
+        await MopupService.Instance.PushAsync(popup);
+        return await popup.Completion.Task;
     }
 }
