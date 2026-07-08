@@ -68,11 +68,12 @@
                                    FontSize="14" FontAttributes="Bold"
                                    TextColor="{StaticResource TextPrimary}" />
 
-                            <!--  Badge de estado  -->
+                            <!--  Badge de estado (topo-direita)  -->
                             <Border Grid.Row="0" Grid.Column="1"
                                     BackgroundColor="{Binding StatusBg}"
                                     StrokeThickness="0"
-                                    Padding="8,2">
+                                    Padding="8,2"
+                                    VerticalOptions="Start">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="10" />
                                 </Border.StrokeShape>
@@ -89,12 +90,25 @@
                             <Label Grid.Row="2" Grid.Column="0"
                                    Text="{Binding DateText}"
                                    FontSize="11"
+                                   VerticalOptions="Center"
                                    TextColor="{StaticResource TextHint}" />
 
-                            <Label Grid.Row="2" Grid.Column="1"
-                                   Text="{Binding ActionText}"
-                                   FontSize="12" FontAttributes="Bold"
-                                   TextColor="{StaticResource BrandRed}" />
+                            <!--  Imprimir (Mapa de Carga) — na mesma linha da data (canto inferior direito).
+                                  Ícone via Image (SVG Tabler "printer") em vez de glifo de fonte: dimensões
+                                  exatas, alinha com o texto e não incha a linha. Grid c/ Padding = área de
+                                  toque maior; o toque não abre o cartão (gesto próprio).  -->
+                            <Grid Grid.Row="2" Grid.Column="1"
+                                  IsVisible="{Binding CanPrint}"
+                                  Padding="14,4,0,4"
+                                  HorizontalOptions="End"
+                                  VerticalOptions="Center">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding PrintCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Image Source="printer.svg"
+                                       HeightRequest="24" WidthRequest="24"
+                                       Aspect="AspectFit" />
+                            </Grid>
                         </Grid>
                     </Border>
                 </DataTemplate>

@@ -15,6 +15,9 @@ public sealed class MockApiService : IApiService
         return Task.FromResult(data);
     }
 
+    public Task<bool> PrintOrderAsync(string phcOrderId, CancellationToken cancellationToken = default)
+        => Task.FromResult(true);
+
     public Task<OrderDetail?> GetOrderAsync(
         LogisticsModule module, string number, CancellationToken cancellationToken = default)
     {

@@ -75,4 +75,13 @@ public interface IApiService
     Task<ParsedScanResult?> ParseScanAsync(
         string payload,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Enfileira a impressão do PDF A4 de uma Encomenda de Cliente (POST api/customer-orders/{id}/print). A
+    /// App não envia caminhos — o servidor resolve o u_filePath e enfileira; um agente externo imprime.
+    /// Devolve <c>true</c> se foi aceite (2xx).
+    /// </summary>
+    Task<bool> PrintOrderAsync(
+        string phcOrderId,
+        CancellationToken cancellationToken = default);
 }

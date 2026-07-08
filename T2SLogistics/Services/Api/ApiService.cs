@@ -49,12 +49,32 @@ public sealed class ApiService : IApiService
                 LineCount = r.lineCount, // nº de linhas contado pela API na listagem
                 Status = MapStatus(r.status),
                 Party = party,
+                CanPrint = r.canPrint, // há PDF A4 (u_filePath) → mostra o botão de imprimir
             }).ToList();
         }
         catch (Exception ex)
         {
             AppLog.Error(nameof(GetOrdersAsync), ex);
             return Array.Empty<OrderSummary>();
+        }
+    }
+
+    public async Task<bool> PrintOrderAsync(string phcOrderId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(phcOrderId))
+            return false;
+
+        try
+        {
+            var endpoint = string.Format(ApiBase.CustomerOrderPrintKey, Uri.EscapeDataString(phcOrderId));
+            var result = await _requestProvider.PostWithStatus(endpoint, "{}");
+            AppLog.Write($"PrintOrderAsync -> {(result is null ? "null" : result.StatusCode.ToString())}");
+            return result is not null && result.StatusCode >= 200 && result.StatusCode < 300;
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(PrintOrderAsync), ex);
+            return false;
         }
     }
 

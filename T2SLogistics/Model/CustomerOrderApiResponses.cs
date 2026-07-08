@@ -17,6 +17,8 @@ namespace T2SLogistics.Model
         public DateTime? orderDate { get; set; }
         public DateTime? deliveryDate { get; set; }
         public string? status { get; set; }
+        // Há PDF A4 para imprimir (u_filePath presente no PHC)? Governa a visibilidade do botão de imprimir.
+        public bool canPrint { get; set; }
     }
 
     public class CustomerOrderItemResponse

@@ -15,7 +15,11 @@ public sealed class OrderListItemViewModel
     public string ActionText { get; }
     public IAsyncRelayCommand OpenCommand { get; }
 
-    public OrderListItemViewModel(OrderSummary order, OrderParty party, string actionText, Func<Task> open)
+    /// <summary>Mostra o botão de imprimir no cartão (há PDF associado e foi passada uma ação de impressão).</summary>
+    public bool CanPrint { get; }
+    public IAsyncRelayCommand PrintCommand { get; }
+
+    public OrderListItemViewModel(OrderSummary order, OrderParty party, string actionText, Func<Task> open, Func<Task>? print = null)
     {
         Number = OrderLabels.Title(party, order.Number); // "Enc. Cliente/Fornecedor Nº {obrano}"
         ClientName = order.ClientName;
@@ -25,5 +29,7 @@ public sealed class OrderListItemViewModel
         StatusText = StatusVisuals.Text(order.Status);
         ActionText = actionText;
         OpenCommand = new AsyncRelayCommand(open);
+        CanPrint = order.CanPrint && print is not null;
+        PrintCommand = new AsyncRelayCommand(print ?? (() => Task.CompletedTask));
     }
 }

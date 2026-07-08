@@ -15,6 +15,8 @@ namespace T2SLogistics.Services.ApiServices
         // Nova API (leitura) — lista leve + detalhe com linhas.
         public const string CustomerOrdersReadKey = "customer-orders";
         public const string CustomerOrderDetailKey = "customer-orders/{0}";
+        // Nova API (escrita) — enfileira a impressão do PDF A4 do documento (o servidor resolve o caminho).
+        public const string CustomerOrderPrintKey = "customer-orders/{0}/print";
         // Nova API (leitura) — encomendas a fornecedor (ordertype=1).
         public const string SupplierOrdersReadKey = "supplier-orders";
         public const string SupplierOrderDetailKey = "supplier-orders/{0}";

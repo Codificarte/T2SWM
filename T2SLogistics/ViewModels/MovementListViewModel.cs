@@ -95,7 +95,8 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
                 var key = order.PhcOrderId;
                 Orders.Add(new OrderListItemViewModel(order, party, "Abrir",
                     () => Shell.Current.GoToAsync(
-                        $"{Routes.MovementDetail}?module={_info.Module}&party={party}&number={Uri.EscapeDataString(key)}")));
+                        $"{Routes.MovementDetail}?module={_info.Module}&party={party}&number={Uri.EscapeDataString(key)}"),
+                    () => PrintAsync(key)));
             }
 
             ShowEmpty = Orders.Count == 0;
@@ -109,4 +110,17 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
     /// <summary>Voltar a carregar (botão do estado vazio / falha de ligação).</summary>
     [RelayCommand]
     private Task Refresh() => LoadAsync();
+
+    /// <summary>
+    /// Imprime o documento (Mapa de Carga) da encomenda: a API resolve o PDF no servidor e enfileira; um
+    /// agente externo imprime. Só chega aqui quando o cartão mostra o botão (CanPrint).
+    /// </summary>
+    private async Task PrintAsync(string phcOrderId)
+    {
+        var ok = await _api.PrintOrderAsync(phcOrderId);
+        await Shell.Current.DisplayAlert(
+            "Impressão",
+            ok ? "Documento enviado para impressão." : "Não foi possível imprimir o documento.",
+            "OK");
+    }
 }

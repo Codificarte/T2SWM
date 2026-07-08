@@ -33,6 +33,8 @@ public sealed class OrderSummary
     public int LineCount { get; init; }
     public OrderStatus Status { get; init; }
     public OrderParty Party { get; init; }
+    /// <summary>Há PDF A4 associado no PHC (u_filePath) — governa o botão de imprimir no cartão.</summary>
+    public bool CanPrint { get; init; }
 }
 
 /// <summary>Detalhe da encomenda, com as linhas.</summary>
