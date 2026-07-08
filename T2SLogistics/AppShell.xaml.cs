@@ -20,6 +20,7 @@ namespace T2SLogistics
             Routing.RegisterRoute(Routes.Movements, typeof(MovementListPage));
             Routing.RegisterRoute(Routes.MovementDetail, typeof(MovementDetailPage));
             Routing.RegisterRoute(Routes.ReceptionReading, typeof(ReceptionReadingPage));
+            Routing.RegisterRoute(Routes.ManagePin, typeof(ManagePinPage));
         }
     }
 }

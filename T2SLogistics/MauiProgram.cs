@@ -113,6 +113,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ViewModels.MainMenuViewModel>();
         builder.Services.AddTransient<Views.MovementListPage>();
         builder.Services.AddTransient<ViewModels.MovementListViewModel>();
+        builder.Services.AddTransient<Views.ManagePinPage>();
+        builder.Services.AddTransient<ViewModels.ManagePinViewModel>();
         builder.Services.AddTransient<Views.MovementDetailPage>();
         builder.Services.AddTransient<ViewModels.MovementDetailViewModel>();
         builder.Services.AddTransient<Views.ReceptionReadingPage>();

@@ -7,6 +7,11 @@ namespace T2SLogistics.Services.ApiServices
     {
         public const string AuthLoginKey = "auth/login";
         public const string AuthSetInitialPasswordKey = "auth/set-initial-password";
+        // PIN do operador (PDA partilhado): lista de operadores + verificar/definir/alterar PIN.
+        public const string AuthOperatorsKey = "auth/operators";
+        public const string AuthVerifyPinKey = "auth/verify-pin";
+        public const string AuthSetInitialPinKey = "auth/set-initial-pin";
+        public const string AuthChangePinKey = "auth/change-pin";
         public const string PhcOrdersKey = "PhcOrders/GetOrdersProd";
         public const string PhcOrdersByCodeKey = "PhcOrders/GetOrdersProd/{0}";
 

@@ -15,8 +15,27 @@ public sealed class MockApiService : IApiService
         return Task.FromResult(data);
     }
 
-    public Task<bool> PrintOrderAsync(string phcOrderId, CancellationToken cancellationToken = default)
-        => Task.FromResult(true);
+    public Task<PrintResult> PrintOrderAsync(string phcOrderId, string pin, CancellationToken cancellationToken = default)
+        => Task.FromResult(PrintResult.Enqueued);
+
+    public Task<IReadOnlyList<OperatorSummary>> GetOperatorsAsync(CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<OperatorSummary> ops = new List<OperatorSummary>
+        {
+            new() { Id = "op-1", Name = "Operador Um", MustSetPin = true },
+            new() { Id = "op-2", Name = "Operador Dois", MustSetPin = false },
+        };
+        return Task.FromResult(ops);
+    }
+
+    public Task<OperatorIdentity?> VerifyPinAsync(string pin, CancellationToken cancellationToken = default)
+        => Task.FromResult<OperatorIdentity?>(new OperatorIdentity { OperatorId = "op-2", OperatorName = "Operador Dois" });
+
+    public Task<PinOperationResult> SetInitialPinAsync(string operatorId, string newPin, CancellationToken cancellationToken = default)
+        => Task.FromResult(PinOperationResult.Success);
+
+    public Task<PinOperationResult> ChangePinAsync(string operatorId, string currentPin, string newPin, CancellationToken cancellationToken = default)
+        => Task.FromResult(PinOperationResult.Success);
 
     public Task<OrderDetail?> GetOrderAsync(
         LogisticsModule module, string number, CancellationToken cancellationToken = default)

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:T2SLogistics.ViewModels"
+             x:Class="T2SLogistics.Views.ManagePinPage"
+             x:DataType="vm:ManagePinViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource PageBg}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <Label Text="Escolha o operador e defina ou altere o PIN. O PIN identifica quem faz as leituras e a impressão."
+                   FontSize="13"
+                   TextColor="{StaticResource TextMuted}" />
+
+            <!--  Seletor de operador  -->
+            <Border BackgroundColor="{StaticResource CardBg}"
+                    Stroke="{StaticResource Border}" StrokeThickness="1" Padding="8,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="11" />
+                </Border.StrokeShape>
+                <Picker Title="Operador"
+                        ItemsSource="{Binding Operators}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedOperator}"
+                        TextColor="{StaticResource TextPrimary}" />
+            </Border>
+
+            <!--  PIN atual (só quando o operador já tem PIN)  -->
+            <VerticalStackLayout Spacing="6" IsVisible="{Binding IsChanging}">
+                <Label Text="PIN atual" FontSize="13" TextColor="{StaticResource TextMuted}" />
+                <Border BackgroundColor="{StaticResource CardBg}" Stroke="{StaticResource Border}" StrokeThickness="1" Padding="12,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="11" />
+                    </Border.StrokeShape>
+                    <Entry Text="{Binding CurrentPin}" Keyboard="Numeric" IsPassword="True" MaxLength="6"
+                           Placeholder="••••" TextColor="{StaticResource TextPrimary}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <!--  Novo PIN + confirmação (quando há operador escolhido)  -->
+            <VerticalStackLayout Spacing="6" IsVisible="{Binding HasOperator}">
+                <Label Text="Novo PIN (4 a 6 dígitos)" FontSize="13" TextColor="{StaticResource TextMuted}" />
+                <Border BackgroundColor="{StaticResource CardBg}" Stroke="{StaticResource Border}" StrokeThickness="1" Padding="12,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="11" />
+                    </Border.StrokeShape>
+                    <Entry Text="{Binding NewPin}" Keyboard="Numeric" IsPassword="True" MaxLength="6"
+                           Placeholder="••••" TextColor="{StaticResource TextPrimary}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6" IsVisible="{Binding HasOperator}">
+                <Label Text="Confirmar novo PIN" FontSize="13" TextColor="{StaticResource TextMuted}" />
+                <Border BackgroundColor="{StaticResource CardBg}" Stroke="{StaticResource Border}" StrokeThickness="1" Padding="12,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="11" />
+                    </Border.StrokeShape>
+                    <Entry Text="{Binding ConfirmPin}" Keyboard="Numeric" IsPassword="True" MaxLength="6"
+                           Placeholder="••••" TextColor="{StaticResource TextPrimary}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <Button Text="{Binding ActionText}"
+                    IsVisible="{Binding HasOperator}"
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="{StaticResource BrandRed}" TextColor="White"
+                    CornerRadius="10" HeightRequest="48" Margin="0,6,0,0" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource BrandRed}" HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

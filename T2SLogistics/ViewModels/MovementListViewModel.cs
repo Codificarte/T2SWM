@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using T2SLogistics.Models;
 using T2SLogistics.Services.Api;
+using T2SLogistics.View.Popups;
 
 namespace T2SLogistics.ViewModels;
 
@@ -112,15 +114,26 @@ public partial class MovementListViewModel : ViewModelBase, IQueryAttributable
     private Task Refresh() => LoadAsync();
 
     /// <summary>
-    /// Imprime o documento (Mapa de Carga) da encomenda: a API resolve o PDF no servidor e enfileira; um
-    /// agente externo imprime. Só chega aqui quando o cartão mostra o botão (CanPrint).
+    /// Imprime o documento (Mapa de Carga) da encomenda. Pede primeiro o PIN (PDA partilhado — identifica
+    /// quem imprime); a API resolve o operador pelo PIN, resolve o PDF e enfileira. Só chega aqui quando o
+    /// cartão mostra o botão (CanPrint).
     /// </summary>
     private async Task PrintAsync(string phcOrderId)
     {
-        var ok = await _api.PrintOrderAsync(phcOrderId);
-        await Shell.Current.DisplayAlert(
-            "Impressão",
-            ok ? "Documento enviado para impressão." : "Não foi possível imprimir o documento.",
-            "OK");
+        var popup = new PinPromptPopup();
+        await MopupService.Instance.PushAsync(popup);
+        var pin = await popup.Completion.Task;
+        if (string.IsNullOrEmpty(pin))
+        {
+            return; // cancelado
+        }
+
+        var message = await _api.PrintOrderAsync(phcOrderId, pin) switch
+        {
+            PrintResult.Enqueued => "Documento enviado para impressão.",
+            PrintResult.InvalidPin => "PIN inválido.",
+            _ => "Não foi possível imprimir o documento.",
+        };
+        await Shell.Current.DisplayAlert("Impressão", message, "OK");
     }
 }

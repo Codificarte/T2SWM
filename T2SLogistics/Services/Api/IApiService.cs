@@ -78,10 +78,25 @@ public interface IApiService
 
     /// <summary>
     /// Enfileira a impressão do PDF A4 de uma Encomenda de Cliente (POST api/customer-orders/{id}/print). A
-    /// App não envia caminhos — o servidor resolve o u_filePath e enfileira; um agente externo imprime.
-    /// Devolve <c>true</c> se foi aceite (2xx).
+    /// App não envia caminhos — o servidor resolve o u_filePath e enfileira; um agente externo imprime. O
+    /// <paramref name="pin"/> identifica quem imprime (PDA partilhado); <see cref="PrintResult.InvalidPin"/>
+    /// quando o PIN não pertence a nenhum operador.
     /// </summary>
-    Task<bool> PrintOrderAsync(
-        string phcOrderId,
+    Task<PrintResult> PrintOrderAsync(
+        string phcOrderId, string pin,
         CancellationToken cancellationToken = default);
+
+    // ---- PIN do Operador (PDA partilhado: o PIN identifica quem age) ----
+
+    /// <summary>Lista de operadores para o seletor de Definir/Alterar PIN (GET auth/operators).</summary>
+    Task<IReadOnlyList<OperatorSummary>> GetOperatorsAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Verifica um PIN e devolve o operador dono, ou <c>null</c> se inválido (POST auth/verify-pin).</summary>
+    Task<OperatorIdentity?> VerifyPinAsync(string pin, CancellationToken cancellationToken = default);
+
+    /// <summary>Define o 1.º PIN de um operador (POST auth/set-initial-pin).</summary>
+    Task<PinOperationResult> SetInitialPinAsync(string operatorId, string newPin, CancellationToken cancellationToken = default);
+
+    /// <summary>Altera o PIN de um operador, exigindo o PIN atual (POST auth/change-pin).</summary>
+    Task<PinOperationResult> ChangePinAsync(string operatorId, string currentPin, string newPin, CancellationToken cancellationToken = default);
 }

@@ -59,22 +59,105 @@ public sealed class ApiService : IApiService
         }
     }
 
-    public async Task<bool> PrintOrderAsync(string phcOrderId, CancellationToken cancellationToken = default)
+    public async Task<PrintResult> PrintOrderAsync(string phcOrderId, string pin, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(phcOrderId))
-            return false;
+            return PrintResult.Failed;
 
         try
         {
             var endpoint = string.Format(ApiBase.CustomerOrderPrintKey, Uri.EscapeDataString(phcOrderId));
-            var result = await _requestProvider.PostWithStatus(endpoint, "{}");
+            var body = Newtonsoft.Json.JsonConvert.SerializeObject(new { pin });
+            var result = await _requestProvider.PostWithStatus(endpoint, body);
             AppLog.Write($"PrintOrderAsync -> {(result is null ? "null" : result.StatusCode.ToString())}");
-            return result is not null && result.StatusCode >= 200 && result.StatusCode < 300;
+            if (result is null)
+                return PrintResult.Failed;
+            if (result.StatusCode >= 200 && result.StatusCode < 300)
+                return PrintResult.Enqueued;
+            if (result.StatusCode == 401)
+                return PrintResult.InvalidPin;
+            return PrintResult.Failed;
         }
         catch (Exception ex)
         {
             AppLog.Error(nameof(PrintOrderAsync), ex);
-            return false;
+            return PrintResult.Failed;
+        }
+    }
+
+    public async Task<IReadOnlyList<OperatorSummary>> GetOperatorsAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var response = await _requestProvider.Get<List<OperatorSummary>>(ApiBase.AuthOperatorsKey);
+            return response ?? new List<OperatorSummary>();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(GetOperatorsAsync), ex);
+            return new List<OperatorSummary>();
+        }
+    }
+
+    public async Task<OperatorIdentity?> VerifyPinAsync(string pin, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(pin))
+            return null;
+        try
+        {
+            var body = Newtonsoft.Json.JsonConvert.SerializeObject(new { pin });
+            var result = await _requestProvider.PostWithStatus(ApiBase.AuthVerifyPinKey, body);
+            if (result == null || result.StatusCode < 200 || result.StatusCode >= 300)
+                return null;
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<OperatorIdentity>(result.Body);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(nameof(VerifyPinAsync), ex);
+            return null;
+        }
+    }
+
+    public Task<PinOperationResult> SetInitialPinAsync(string operatorId, string newPin, CancellationToken cancellationToken = default)
+        => PinPostAsync(ApiBase.AuthSetInitialPinKey, new { operatorId, newPin }, nameof(SetInitialPinAsync));
+
+    public Task<PinOperationResult> ChangePinAsync(string operatorId, string currentPin, string newPin, CancellationToken cancellationToken = default)
+        => PinPostAsync(ApiBase.AuthChangePinKey, new { operatorId, currentPin, newPin }, nameof(ChangePinAsync));
+
+    // POST de operação de PIN: 2xx = sucesso; senão extrai a mensagem de erro da API (409/400).
+    private async Task<PinOperationResult> PinPostAsync(string endpoint, object payload, string op)
+    {
+        try
+        {
+            var body = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
+            var result = await _requestProvider.PostWithStatus(endpoint, body);
+            if (result != null && result.StatusCode >= 200 && result.StatusCode < 300)
+                return PinOperationResult.Success;
+            return PinOperationResult.Fail(ExtractError(result?.Body));
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error(op, ex);
+            return PinOperationResult.Fail(null);
+        }
+    }
+
+    // Extrai { message } ou { errors:[...] } do corpo de erro da API.
+    private static string? ExtractError(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return null;
+        try
+        {
+            var obj = Newtonsoft.Json.Linq.JObject.Parse(body);
+            var errors = obj["errors"];
+            if (errors != null && errors.HasValues)
+                return string.Join("\n", errors.Select(e => e.ToString()));
+            return obj["message"]?.ToString();
+        }
+        catch
+        {
+            return null;
         }
     }
 

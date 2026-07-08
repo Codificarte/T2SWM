@@ -20,6 +20,7 @@ public partial class MainMenuViewModel : ViewModelBase
         string clipboardCheck = ((char)0xEA6C).ToString(); // Inventários
         string barcode = ((char)0xEBC6).ToString();        // Artigos
         string settings = ((char)0xEB20).ToString();       // Definições
+        string key = ((char)0xEAC7).ToString();             // PIN do operador (key)
         string logout = ((char)0xEBA8).ToString();          // Terminar sessão (logout)
 
         // Encomendas: lista reutilizável com filtro Clientes/Fornecedores (expedição + receção unificadas).
@@ -32,6 +33,10 @@ public partial class MainMenuViewModel : ViewModelBase
         // Ainda por construir — placeholder por agora.
         Menu.Add(new MenuItemViewModel("Artigos", barcode,
             () => Shell.Current.DisplayAlert("Artigos", "Ecrã de artigos — brevemente.", "OK")));
+
+        // PIN do operador: definir/alterar o PIN (PDA partilhado — o PIN identifica quem faz leituras/impressão).
+        Menu.Add(new MenuItemViewModel("PIN do operador", key,
+            () => Shell.Current.GoToAsync(Routes.ManagePin)));
 
         // Definições: abre o mesmo popup de configuração disponível no login (ConfigurationSettingsPopup).
         Menu.Add(new MenuItemViewModel("Definições", settings,

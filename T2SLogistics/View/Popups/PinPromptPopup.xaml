@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopup:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mopup="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                 x:Class="T2SLogistics.View.Popups.PinPromptPopup"
+                 CloseWhenBackgroundIsClicked="True">
+    <mopup:PopupPage.Animation>
+        <mopupsanim:ScaleAnimation DurationIn="250" EasingIn="CubicOut" ScaleIn="1" ScaleOut="0.9" />
+    </mopup:PopupPage.Animation>
+    <Grid>
+        <Grid BackgroundColor="#66000000">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCancel" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <Border BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Center"
+                WidthRequest="320" Stroke="Transparent" Padding="20">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Spacing="14">
+                <Label Text="Introduza o seu PIN" FontSize="17" FontAttributes="Bold"
+                       TextColor="#1F2430" HorizontalOptions="Center" />
+                <Label x:Name="MessageLabel" FontSize="12" TextColor="#6B7280"
+                       HorizontalTextAlignment="Center" IsVisible="False" />
+
+                <Border BackgroundColor="#F5F6F8" Stroke="#E5E7EB" StrokeThickness="1" Padding="12,2">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <Entry x:Name="PinEntry" Keyboard="Numeric" IsPassword="True" MaxLength="6"
+                           Placeholder="••••" HorizontalTextAlignment="Center" FontSize="26"
+                           TextColor="#1F2430" Completed="OnConfirm" />
+                </Border>
+
+                <Label x:Name="ErrorLabel" FontSize="12" TextColor="#C0392B"
+                       HorizontalTextAlignment="Center" IsVisible="False" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                    <Button Text="Cancelar" Clicked="OnCancel" TextColor="#1F2430"
+                            BackgroundColor="#EEF0F3" CornerRadius="10" HeightRequest="46" />
+                    <Button Grid.Column="1" Text="Confirmar" Clicked="OnConfirm" TextColor="White"
+                            BackgroundColor="#DD6A60" CornerRadius="10" HeightRequest="46" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</mopup:PopupPage>
